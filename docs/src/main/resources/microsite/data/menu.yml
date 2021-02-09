@@ -1,0 +1,10 @@
+options:
+  - title: Introduction
+    url: docs/index.html
+
+  - title: Section1
+    url: docs/section1.html
+
+    nested_options:
+      - title: Subsection1
+        url: docs/section1/subsection1.html
