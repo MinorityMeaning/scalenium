@@ -3,7 +3,7 @@ layout: home
 title:  Home
 position: 0
 technologies:
- - first:  ["Scala", "Algorithms library is completely written in Scala"]
+ - first:  ["Scala", "Scalenium library is completely written in Scala"]
  - second: ["Documentation", "Documentation"]
  - third:  ["API Documentation", "API Documentation"]
 ---
@@ -23,7 +23,7 @@ In addition, **Improve this Page** button is available on the documentation page
 
 Add the following to your `build.sbt`
 ```scala
-libraryDependencies += "com.github.artemkorsakov" %% "algorithms-core" % "@VERSION@"
+libraryDependencies += "com.github.artemkorsakov" %% "scalenium-core" % "@VERSION@"
 ```
 
 ### Documentation

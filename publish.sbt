@@ -7,8 +7,8 @@ ThisBuild / organizationHomepage := Some(url("https://github.com/artemkorsakov")
 /*
 ThisBuild / scmInfo := Some(
   ScmInfo(
-    url("https://github.com/artemkorsakov/seleniumOnScala"),
-    "scm:git@github.com:artemkorsakov/seleniumOnScala.git"
+    url("https://github.com/artemkorsakov/scalenium"),
+    "scm:git@github.com:artemkorsakov/scalenium.git"
   )
 )
  */
@@ -22,7 +22,7 @@ ThisBuild / developers := List(
 )
 
 ThisBuild / description := "Selenium on Scala examples."
-//ThisBuild / homepage := Some(url("https://artemkorsakov.github.io/seleniumOnScala/"))
+//ThisBuild / homepage := Some(url("https://artemkorsakov.github.io/scalenium/"))
 
 //ThisBuild / pomIncludeRepository := { _ => false }
 ThisBuild / credentials += Credentials(
@@ -34,7 +34,7 @@ ThisBuild / credentials += Credentials(
 
 import xerial.sbt.Sonatype._
 ThisBuild / sonatypeSessionName := s"[sbt-sonatype] ${name.value} ${version.value}"
-ThisBuild / sonatypeProjectHosting := Some(GitHubHosting("artemkorsakov", "seleniumOnScala", "artemkorsakov@mail.ru"))
+ThisBuild / sonatypeProjectHosting := Some(GitHubHosting("artemkorsakov", "scalenium", "artemkorsakov@mail.ru"))
 ThisBuild / sonatypeProfileName := "com.github.artemkorsakov"
 ThisBuild / publishTo := sonatypePublishToBundle.value
 //ThisBuild / publishMavenStyle := true
