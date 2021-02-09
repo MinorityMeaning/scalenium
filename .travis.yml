@@ -20,7 +20,8 @@ install:
     scripts/decrypt-keys.sh; fi
 
 script:
-  - sbt +test scalafmtCheckAll scalafmtSbtCheck;
+  - sbt +test
+  - sbt scalafmtCheckAll scalafmtSbtCheck
 
 after_success:
   - if [ "$TRAVIS_BRANCH" = "master" -a "$TRAVIS_PULL_REQUEST" = "false" ]; then bash

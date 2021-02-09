@@ -1,6 +1,6 @@
 # Scalenium
 
-Scalenium contains examples of browser control on Scala.
+Scalenium contains examples of Selenium on Scala.
 
 ## Installation
 
@@ -8,7 +8,7 @@ Scalenium contains examples of browser control on Scala.
 [![latest snapshot](https://img.shields.io/nexus/s/https/oss.sonatype.org/com.github.artemkorsakov/scalenium-core_2.13.svg?label=latest%20snapshot&color=success)](https://oss.sonatype.org/content/repositories/snapshots/com/github/artemkorsakov/scalenium-core_2.13/)
 ![release](https://img.shields.io/github/v/release/artemkorsakov/scalenium?include_prereleases)
 
-[![master](https://img.shields.io/travis/com/artemkorsakov/scalenium/master?label=master)](https://travis-ci.com/artemkorsakov/scalenium)
+[![master](https://img.shields.io/travis/com/artemkorsakov/scalenium/master)](https://travis-ci.com/artemkorsakov/scalenium)
 ![last commit](https://img.shields.io/github/last-commit/artemkorsakov/scalenium)
 
 Add the following to your build.sbt

@@ -57,6 +57,7 @@ lazy val coreJVM = coreM.jvm
 lazy val coreJS  = coreM.js
 lazy val coreM = module("core", CrossType.Pure)
   .settings(
+    libraryDependencies ++= Dependencies.root.value,
     libs.dependencies("cats-core")
   )
 
@@ -131,7 +132,7 @@ lazy val commonSettings =
   addCompilerPlugins(libs, "kind-projector") ++ sharedCommonSettings ++ scalacAllSettings ++ Seq(
     organization := "com.github.artemkorsakov",
     parallelExecution in Test := false,
-    crossScalaVersions := Seq(libs.vers("scalac_2.13"), libs.vers("scalac_2.12"), scalaVersion.value)
+    crossScalaVersions := Seq(libs.vers("scalac_2.13"), libs.vers("scalac_2.12"))
   )
 
 lazy val commonJsSettings = Seq(scalaJSStage in Global := FastOptStage)
