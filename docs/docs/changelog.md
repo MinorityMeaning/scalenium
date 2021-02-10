@@ -1,5 +1,6 @@
 ---
-layout: home title:  "Changelog"
+layout: home 
+title:  "Changelog"
 position: 99
 ---
 

@@ -1,7 +1,10 @@
 import _root_.sbtcrossproject.CrossPlugin.autoImport.CrossType
 import microsites._
-import sbtcatalysts.CatalystsKeys._
+import sbtcatalysts.CatalystsKeys.docsMappingsAPIDir
 
+addCommandAlias("com", "all compile test:compile")
+addCommandAlias("fmt", "all scalafmtSbt scalafmtAll")
+addCommandAlias("fmtCheck", "all scalafmtSbtCheck scalafmtCheckAll")
 addCommandAlias("gitSnapshots", ";set version in ThisBuild := git.gitDescribedVersion.value.get + \"-SNAPSHOT\"")
 
 val release_version = "0.0.1"
@@ -10,9 +13,9 @@ val badge =
 
 val apache2 = "Apache-2.0" -> url("https://www.apache.org/licenses/LICENSE-2.0.html")
 val gh = GitHubSettings(
-  org = "com.github.artemkorsakov",
+  org = "artemkorsakov",
   proj = "scalenium",
-  publishOrg = "com.github.artemkorsakov",
+  publishOrg = "artemkorsakov",
   license = apache2
 )
 
@@ -22,7 +25,7 @@ val mainDev =
     "Artem Korsakov",
     "@artemkorsakov",
     "artemkorsakov@mail.ru",
-    new java.net.URL("http://github.com/artemkorsakov")
+    new java.net.URL(github)
   )
 
 val devs = List(Developer)
@@ -34,7 +37,7 @@ lazy val module       = mkModuleFactory(gh.proj, mkConfig(rootSettings, commonJv
 lazy val prj          = mkPrjFactory(rootSettings)
 
 lazy val Scalenium = project
-  .in(file("."))
+  //.in(file("."))
   .configure(mkRootConfig(rootSettings, rootJVM))
   .aggregate(rootJVM, rootJS)
   .dependsOn(rootJVM, rootJS)
@@ -71,7 +74,9 @@ lazy val testsM = module("tests", CrossType.Pure)
     libs.testDependencies("scalatest", "scalacheck")
   )
 
-/** Docs - Generates and publishes the scaladoc API documents and the project web site using sbt-microsite. */
+/** Docs - Generates and publishes the scaladoc API documents and the project web site using sbt-microsite.
+  * https://47degrees.github.io/sbt-microsites/docs/settings/
+  */
 lazy val docs = project
   .configure(mkDocConfig(gh, rootSettings, Nil, core))
   .enablePlugins(MicrositesPlugin)
@@ -86,7 +91,7 @@ lazy val docs = project
     micrositeDocumentationUrl := "/scalenium/docs",
     micrositeDocumentationLabelDescription := "Documentation",
     micrositeAuthor := "Artem Korsakov",
-    micrositeGithubOwner := "com.github.artemkorsakov",
+    micrositeGithubOwner := "artemkorsakov",
     micrositeGithubRepo := "scalenium",
     micrositeTheme := "pattern",
     micrositeEditButton := Some(
