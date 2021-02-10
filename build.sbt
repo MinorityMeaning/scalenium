@@ -13,9 +13,9 @@ val badge =
 
 val apache2 = "Apache-2.0" -> url("https://www.apache.org/licenses/LICENSE-2.0.html")
 val gh = GitHubSettings(
-  org = "artemkorsakov",
+  org = "com.github.artemkorsakov",
   proj = "scalenium",
-  publishOrg = "artemkorsakov",
+  publishOrg = "com.github.artemkorsakov",
   license = apache2
 )
 
@@ -36,8 +36,8 @@ lazy val rootSettings = buildSettings ++ commonSettings ++ publishSettings ++ sc
 lazy val module       = mkModuleFactory(gh.proj, mkConfig(rootSettings, commonJvmSettings, commonJsSettings))
 lazy val prj          = mkPrjFactory(rootSettings)
 
-lazy val Scalenium = Project(id = "scalenium", base = file("."))
-  //.in(file("."))
+lazy val Scalenium = project
+  .in(file("."))
   .configure(mkRootConfig(rootSettings, rootJVM))
   .aggregate(rootJVM, rootJS)
   .dependsOn(rootJVM, rootJS)
@@ -91,7 +91,7 @@ lazy val docs = project
     micrositeDocumentationUrl := "/scalenium/docs",
     micrositeDocumentationLabelDescription := "Documentation",
     micrositeAuthor := "Artem Korsakov",
-    micrositeGithubOwner := "artemkorsakov",
+    micrositeGithubOwner := "com.github.artemkorsakov",
     micrositeGithubRepo := "scalenium",
     micrositeTheme := "pattern",
     micrositeEditButton := Some(
