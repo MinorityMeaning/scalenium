@@ -136,8 +136,8 @@ lazy val buildSettings = sharedBuildSettings(gh, libs)
 lazy val commonSettings =
   addCompilerPlugins(libs, "kind-projector") ++ sharedCommonSettings ++ scalacAllSettings ++ Seq(
     organization := "com.github.artemkorsakov",
-    parallelExecution in Test := false,
-    crossScalaVersions := Seq(libs.vers("scalac_2.13"), libs.vers("scalac_2.12"))
+    parallelExecution in Test := true,
+    crossScalaVersions := Seq(libs.vers("scalac_2.12"), libs.vers("scalac_2.13"))
   )
 
 lazy val commonJsSettings = Seq(scalaJSStage in Global := FastOptStage)
