@@ -13,9 +13,9 @@ val badge =
 
 val apache2 = "Apache-2.0" -> url("https://www.apache.org/licenses/LICENSE-2.0.html")
 val gh = GitHubSettings(
-  org = "com.github.artemkorsakov",
+  org = "artemkorsakov",
   proj = "scalenium",
-  publishOrg = "com.github.artemkorsakov",
+  publishOrg = "artemkorsakov",
   license = apache2
 )
 
@@ -39,8 +39,8 @@ lazy val prj          = mkPrjFactory(rootSettings)
 lazy val Scalenium = project
   .in(file("."))
   .configure(mkRootConfig(rootSettings, rootJVM))
-  .aggregate(rootJVM, rootJS)
-  .dependsOn(rootJVM, rootJS)
+  .aggregate(rootJVM /*, rootJS */ )
+  .dependsOn(rootJVM /*, rootJS */ )
   .settings(noPublishSettings)
 
 lazy val rootJVM = project
@@ -83,7 +83,6 @@ lazy val docs = project
   .enablePlugins(ScalaUnidocPlugin)
   .settings(
     crossScalaVersions := Seq(scalaVersion.value),
-    micrositeSettings(gh, mainDev, "scalenium"),
     micrositeName := "Scalenium",
     micrositeDescription := "Selenium on Scala examples.",
     micrositeUrl := "https://artemkorsakov.github.io",
@@ -91,7 +90,7 @@ lazy val docs = project
     micrositeDocumentationUrl := "/scalenium/docs",
     micrositeDocumentationLabelDescription := "Documentation",
     micrositeAuthor := "Artem Korsakov",
-    micrositeGithubOwner := "com.github.artemkorsakov",
+    micrositeGithubOwner := "artemkorsakov",
     micrositeGithubRepo := "scalenium",
     micrositeTheme := "pattern",
     micrositeEditButton := Some(
@@ -136,7 +135,7 @@ lazy val buildSettings = sharedBuildSettings(gh, libs)
 lazy val commonSettings =
   addCompilerPlugins(libs, "kind-projector") ++ sharedCommonSettings ++ scalacAllSettings ++ Seq(
     organization := "com.github.artemkorsakov",
-    parallelExecution in Test := true,
+    parallelExecution in Test := false,
     crossScalaVersions := Seq(libs.vers("scalac_2.12"), libs.vers("scalac_2.13"))
   )
 
