@@ -3,8 +3,11 @@ import sbt._
 object Dependencies {
 
   object Version {
+    val Scala213 = "2.13.4"
+    val Scala212 = "2.12.13"
+
     val Scalatestplus = "3.2.2.0"
-    val Selenium      = "4.0.0-alpha-7"
+    val Selenium      = "4.0.0-beta-1"
     val Pureconfig    = "0.14.0"
   }
 

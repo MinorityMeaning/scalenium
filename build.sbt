@@ -1,3 +1,4 @@
+import Dependencies.Version._
 import _root_.sbtcrossproject.CrossPlugin.autoImport.CrossType
 import microsites._
 import sbtcatalysts.CatalystsKeys.docsMappingsAPIDir
@@ -136,7 +137,8 @@ lazy val commonSettings =
   addCompilerPlugins(libs, "kind-projector") ++ sharedCommonSettings ++ scalacAllSettings ++ Seq(
     organization := "com.github.artemkorsakov",
     parallelExecution in Test := false,
-    crossScalaVersions := Seq(libs.vers("scalac_2.12"), libs.vers("scalac_2.13"))
+    scalaVersion := Scala213,
+    crossScalaVersions := Seq(Scala212, Scala213)
   )
 
 lazy val commonJsSettings = Seq(scalaJSStage in Global := FastOptStage)

@@ -14,8 +14,8 @@ technologies:
 
 @DESCRIPTION@
 
-Please [email](@EMAIL@), create [an issue](@ISSUES@) or [pull request](@PULLS@) on github 
-any cases that you consider important.
+Please [send an email](@EMAIL@), create [an issue](@ISSUES@) or [a pull request](@PULLS@) on github 
+for any cases you think are important.
 
 In addition, **Improve this Page** button is available on the documentation pages.
 
