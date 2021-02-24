@@ -133,12 +133,35 @@ lazy val docs = project
 
 lazy val buildSettings = sharedBuildSettings(gh, libs)
 
+val lintFlags =
+  Def.setting {
+    CrossVersion.partialVersion(scalaVersion.value) match {
+      case Some((2, 13)) =>
+        // Excluding -byname-implicit is required for Scala 2.13 due to https://github.com/scala/bug/issues/12072
+        "-Xlint:_,-byname-implicit"
+      case _ =>
+        "-Xlint:_"
+    }
+  }
+
 lazy val commonSettings =
   addCompilerPlugins(libs, "kind-projector") ++ sharedCommonSettings ++ scalacAllSettings ++ Seq(
     organization := "com.github.artemkorsakov",
     parallelExecution in Test := false,
     scalaVersion := Scala213,
-    crossScalaVersions := Seq(Scala212, Scala213)
+    crossScalaVersions := Seq(Scala212, Scala213),
+    scalacOptions ++= Seq(
+      "-deprecation",
+      "-encoding",
+      "UTF-8",
+      "-language:experimental.macros",
+      "-feature",
+      "-unchecked",
+      "-Xfatal-warnings",
+      "-Ywarn-numeric-widen",
+      "-Ywarn-value-discard",
+      lintFlags.value
+    )
   )
 
 lazy val commonJsSettings = Seq(scalaJSStage in Global := FastOptStage)

@@ -23,3 +23,6 @@ travis-deploy-key
 travis-deploy-key.pub
 all.gpg
 /.bsp/
+
+# drivers
+chromedriver.exe

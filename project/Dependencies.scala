@@ -9,14 +9,18 @@ object Dependencies {
     val Scalatestplus = "3.2.2.0"
     val Selenium      = "4.0.0-beta-1"
     val Pureconfig    = "0.14.0"
+    val Logback       = "1.2.3"
+    val ScalaLogging  = "3.9.2"
   }
 
   val root = Def.setting(
     Seq(
-      "org.scalatestplus"      %% "selenium-3-141"        % Version.Scalatestplus,
-      "org.seleniumhq.selenium" % "selenium-java"         % Version.Selenium,
-      "com.github.pureconfig"  %% "pureconfig"            % Version.Pureconfig,
-      "com.github.pureconfig"  %% "pureconfig-enumeratum" % Version.Pureconfig
+      "org.scalatestplus"          %% "selenium-3-141"        % Version.Scalatestplus,
+      "org.seleniumhq.selenium"     % "selenium-java"         % Version.Selenium,
+      "com.github.pureconfig"      %% "pureconfig"            % Version.Pureconfig,
+      "com.github.pureconfig"      %% "pureconfig-enumeratum" % Version.Pureconfig,
+      "ch.qos.logback"              % "logback-classic"       % Version.Logback,
+      "com.typesafe.scala-logging" %% "scala-logging"         % Version.ScalaLogging
     )
   )
 

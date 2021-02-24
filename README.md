@@ -1,6 +1,6 @@
 # Scalenium
 
-Scalenium contains examples of Selenium on Scala.
+Scalenium library contains examples of Selenium on Scala.
 
 ## Installation
 
@@ -15,12 +15,6 @@ Add the following to your build.sbt
 
 ```
 libraryDependencies += "com.github.artemkorsakov" %% "scalenium-core" % "0.0.1"
-```
-
-**Using**
-
-```scala
-
 ```
 
 ## Documentation
