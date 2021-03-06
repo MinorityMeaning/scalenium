@@ -28,5 +28,5 @@ case class UpQuery(query: Query)(implicit driver: WebDriver) {
 }
 
 object UpQuery {
-  implicit def query2KryptoQuery(query: Query)(implicit driver: WebDriver): UpQuery = UpQuery(query)
+  implicit def query2UpQuery(query: Query)(implicit driver: WebDriver): UpQuery = UpQuery(query)
 }

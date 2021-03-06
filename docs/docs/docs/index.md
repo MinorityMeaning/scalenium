@@ -23,14 +23,21 @@ Create an `application.conf` file and add it as a resource of your application
 
 ```text
 selenium {
-    is-remote = false
-    hub = "http://localhost:4444/wd/hub"
+    is-remote = true
     browser = "chrome"
     timeout = 30
 }
 ```
 
-#### Download drivers for local run
+#### Remote run in [Testcontainers](https://github.com/testcontainers/testcontainers-scala#selenium)
 
-#### Remote run in Docker
+- Install [docker](https://docs.docker.com/get-docker/)
+- Set `is-remote = true` parameter
+- Run tests
+
+#### Local run
+
+- Download [chromedriver](https://chromedriver.chromium.org/) and put it to the project directory
+- Set `is-remote = false` parameter
+- Run tests
 

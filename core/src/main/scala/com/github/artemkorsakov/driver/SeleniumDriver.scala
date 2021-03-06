@@ -12,14 +12,12 @@ import org.openqa.selenium.{ Capabilities, WebDriver }
 import java.net.URL
 
 object SeleniumDriver {
-  private val hub: String       = serviceConf.selenium.hub
-  private val hubURL: URL       = new URL(hub)
   private val isRemote: Boolean = serviceConf.selenium.isRemote
   private val browser: String   = serviceConf.selenium.browser
 
   def driver: WebDriver = if (isRemote) remoteDriver else localDriver
 
-  def remoteDriver: WebDriver = new RemoteWebDriver(hubURL, capabilities)
+  def remoteDriver: WebDriver = new RemoteWebDriver(new URL(""), capabilities)
 
   def localDriver: WebDriver =
     browser.toLowerCase match {
