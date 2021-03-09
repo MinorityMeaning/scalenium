@@ -18,13 +18,13 @@ libraryDependencies += "com.github.artemkorsakov" %% "scalenium-core" % "@VERSIO
 
 #### Set configuration
 
-Create an `application.conf` file and add it as a resource of your application 
+Create an `reference.conf` file and add it as a resource of your application 
 (`src/main/resources` or `src/test/resources` (for tests)):
 
 ```text
 selenium {
-    is-remote = true
     browser = "chrome"
+    video-logs = ""
     timeout = 30
 }
 ```
@@ -32,12 +32,4 @@ selenium {
 #### Remote run in [Testcontainers](https://github.com/testcontainers/testcontainers-scala#selenium)
 
 - Install [docker](https://docs.docker.com/get-docker/)
-- Set `is-remote = true` parameter
 - Run tests
-
-#### Local run
-
-- Download [chromedriver](https://chromedriver.chromium.org/) and put it to the project directory
-- Set `is-remote = false` parameter
-- Run tests
-

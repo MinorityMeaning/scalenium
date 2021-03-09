@@ -1,17 +1,15 @@
 package com.github.artemkorsakov.conf
 
 import pureconfig._
+import pureconfig.generic.auto._
 import pureconfig.generic.semiauto._
+import pureconfig.module.enumeratum._
 
 object Config {
 
-  /** @param isRemote true if tests will run in Selenium Hub
-    * @param browser the browser in which the tests will run
-    * @param timeout element timeout
-    */
-  final case class Selenium(isRemote: Boolean, browser: String, timeout: Long)
+  final case class SeleniumConf(browser: Browser = Browser.Chrome, videoLogs: String = "", timeout: Long = 30)
 
-  final case class ServiceConf(selenium: Selenium)
+  final case class ServiceConf(selenium: SeleniumConf = SeleniumConf())
 
   implicit val configReader: ConfigReader[ServiceConf] = deriveReader[ServiceConf]
 

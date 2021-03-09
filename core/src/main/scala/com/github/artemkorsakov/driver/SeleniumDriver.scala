@@ -1,45 +1,25 @@
 package com.github.artemkorsakov.driver
 
-import com.github.artemkorsakov.conf.Config.serviceConf
-import org.openqa.selenium.chrome.{ ChromeDriver, ChromeOptions }
-import org.openqa.selenium.edge.{ EdgeDriver, EdgeOptions }
-import org.openqa.selenium.firefox.{ FirefoxDriver, FirefoxOptions }
-import org.openqa.selenium.ie.{ InternetExplorerDriver, InternetExplorerOptions }
-import org.openqa.selenium.remote.RemoteWebDriver
-import org.openqa.selenium.safari.{ SafariDriver, SafariOptions }
-import org.openqa.selenium.{ Capabilities, WebDriver }
-
-import java.net.URL
+import com.github.artemkorsakov.conf.Browser
+import com.github.artemkorsakov.conf.Browser._
+import org.openqa.selenium.Capabilities
+import org.openqa.selenium.chrome.ChromeOptions
+import org.openqa.selenium.edge.EdgeOptions
+import org.openqa.selenium.firefox.FirefoxOptions
+import org.openqa.selenium.ie.InternetExplorerOptions
+import org.openqa.selenium.safari.SafariOptions
 
 object SeleniumDriver {
-  private val isRemote: Boolean = serviceConf.selenium.isRemote
-  private val browser: String   = serviceConf.selenium.browser
-
-  def driver: WebDriver = if (isRemote) remoteDriver else localDriver
-
-  def remoteDriver: WebDriver = new RemoteWebDriver(new URL(""), capabilities)
-
-  def localDriver: WebDriver =
-    browser.toLowerCase match {
-      case "firefox" => new FirefoxDriver(firefoxOptions)
-      case "edge"    => new EdgeDriver(edgeOptions)
-      case "ie"      => new InternetExplorerDriver(ieOptions)
-      case "safari"  => new SafariDriver(safariOptions)
-      case "chrome"  => new ChromeDriver(chromeOptions)
-      case _         => throw new IllegalArgumentException(s"Invalid browser: $browser")
+  def capabilities(browser: Browser): Capabilities =
+    browser match {
+      case Firefox => firefoxOptions
+      case Edge    => edgeOptions
+      case IE      => ieOptions
+      case Safari  => safariOptions
+      case Chrome  => chromeOptions
     }
 
-  private def capabilities: Capabilities =
-    browser.toLowerCase match {
-      case "firefox" => firefoxOptions
-      case "edge"    => edgeOptions
-      case "ie"      => ieOptions
-      case "safari"  => safariOptions
-      case "chrome"  => chromeOptions
-      case _         => throw new IllegalArgumentException(s"Invalid browser: $browser")
-    }
-
-  private def chromeOptions: ChromeOptions = {
+  def chromeOptions: ChromeOptions = {
     val options = new ChromeOptions
     // Docker has no monitor so we set a fixed size
     options.addArguments("--window-size=1920,1080")
@@ -54,12 +34,12 @@ object SeleniumDriver {
     options
   }
 
-  private def firefoxOptions: FirefoxOptions = new FirefoxOptions()
+  def firefoxOptions: FirefoxOptions = new FirefoxOptions()
 
-  private def edgeOptions: EdgeOptions = new EdgeOptions()
+  def edgeOptions: EdgeOptions = new EdgeOptions()
 
-  private def safariOptions: SafariOptions = new SafariOptions()
+  def safariOptions: SafariOptions = new SafariOptions()
 
-  private def ieOptions: InternetExplorerOptions = new InternetExplorerOptions()
+  def ieOptions: InternetExplorerOptions = new InternetExplorerOptions()
 
 }
