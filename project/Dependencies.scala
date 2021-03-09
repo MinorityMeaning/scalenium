@@ -17,10 +17,10 @@ object Dependencies {
   val root = Def.setting(
     Seq(
       "org.scalatestplus"          %% "selenium-3-141"                          % Version.Scalatestplus,
-      "org.seleniumhq.selenium"    % "selenium-java"                            % Version.Selenium,
+      "org.seleniumhq.selenium"     % "selenium-java"                           % Version.Selenium,
       "com.github.pureconfig"      %% "pureconfig"                              % Version.Pureconfig,
       "com.github.pureconfig"      %% "pureconfig-enumeratum"                   % Version.Pureconfig,
-      "ch.qos.logback"             % "logback-classic"                          % Version.Logback,
+      "ch.qos.logback"              % "logback-classic"                         % Version.Logback,
       "com.typesafe.scala-logging" %% "scala-logging"                           % Version.ScalaLogging,
       "com.dimafeng"               %% "testcontainers-scala-scalatest-selenium" % Version.Testcontainers
     )
