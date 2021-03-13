@@ -14,14 +14,14 @@ class RankingListPage(implicit val webDriver: WebDriver) extends Page with Waite
   val nextPageQuery: Query     = cssSelector("li.naechste-seite > a")
   val selectedPageQuery: Query = cssSelector("li.selected > a")
 
-  def countriesList(): Seq[Country] =
-    findAll(tableQuery).map(el => Country(el.text.trim, el.attribute("href"))).toSeq
-
   def clickCompact(): Unit =
     if (!compactQuery.doesClassContain("active")) {
       clickOn(compactQuery)
       val _ = compactQuery.waitClassContain("active")
     }
+
+  def countriesList(): Seq[Country] =
+    findAll(tableQuery).map(el => Country(el.text.trim, el.attribute("href"))).toSeq
 
   def clickNextPage(): Unit = {
     val nextPage = selectedPageQuery.normalizeSpaceText.toInt + 1

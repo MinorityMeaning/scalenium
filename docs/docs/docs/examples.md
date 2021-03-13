@@ -23,6 +23,9 @@ title: "Examples"
 
 Поэтому хочется, чтобы Selenium разворачивался исключительно на время прогона автотестов и 
 все ресурсы чистились сразу после прогона. 
-Testcontainers именно это и делает - разворачивает docker image.
+Testcontainers именно это и делает - разворачивает docker image на время прогона автотестов.
 
 Правда возникает проблема с локальным дебагом, но для этого всегда можно использовать отдельный [Spec](https://github.com/artemkorsakov/scalenium/blob/master/tests/src/test/scala/com/github/artemkorsakov/spec/LocalDebugSpec.scala)
+
+Рассмотрим пример использования Scala + Selenium на следующих примерах:
+- **Football teams**: Сколько человек в каждой футбольной сборной имеют более одного гражданства и что это за гражданства?

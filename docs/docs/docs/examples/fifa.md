@@ -4,9 +4,7 @@ title: "Football teams"
 realization: examples/FootballTeams.scala
 ---
 
-# Football teams
-
-#### Рассмотрим пример: 
+### Task: 
 Сколько человек в каждой футбольной сборной имеют более одного гражданства и что это за гражданства?
 
 За основу возьмем данные с сайта [transfermarkt.com](https://www.transfermarkt.com/):
@@ -15,36 +13,43 @@ realization: examples/FootballTeams.scala
 - [страница игрока](https://www.transfermarkt.com/dedryck-boyata/profil/spieler/88262)
 - На странице игрока есть поле **Citizenship**, которое предоставляет необходимую информацию
 
-### Составление списка сборных
+### List of football/soccer teams
 
-1) Согласно [доке](https://www.scalatest.org/plus/selenium) переход на заданную страницу осуществляется так: 
+Согласно [доке _ScalaTest + Selenium_](https://www.scalatest.org/plus/selenium) переход на заданную страницу осуществляется так: 
+
 ```scala
+class RankingListPage(implicit val webDriver: WebDriver) extends Page {
+   val url = "https://www.transfermarkt.com/statistik/weltrangliste/statistik"
+}
+
 val rankingListPage = new RankingListPage()
 go to rankingListPage
 ```
+
 `RankingListPage` должен реализовывать `trait org.scalatestplus.selenium.Page`
 
-2) Далее нужно дождаться окончания загрузки страницы. Возьмем кнопку **Compact** и дождемся, когда она станет видима.
-Локатор кнопки будет таким: 
-   
+Далее нужно дождаться окончания загрузки страницы. Возьмем кнопку **Compact** и дождемся, когда она станет видима. 
+Xpath локатор кнопки будет таким:
 ```scala
 val compactQuery: Query = xpath("//div[.='Compact']")
 ```
    
 Ожидание видимости элемента осуществляется так (`timeout` можно задать в конфиге, `query` - заданный элемент):
 ```scala
-new WebDriverWait(driver, Duration.ofSeconds(timeout)).until(ExpectedConditions.visibilityOfElementLocated(query.by))
+def webDriverWait(implicit driver: WebDriver) =
+  new WebDriverWait(driver, Duration.ofSeconds(timeout))
+
+webDriverWait(driver).until(ExpectedConditions.visibilityOfElementLocated(query.by))
 ```
 
-3) Нам нужно перейти на закладку **Compact**, но нет гарантии, что она активна 
-(стартовая страница может быть изменена на ту, где по умолчанию открыта другая закладка).
+Рассмотрим переход на закладку **Compact** (да, она уже активна, просто для примера).
 
 Переход на закладку будет состоять из следующих шагов:
-- Проверяем, активна ли закладка. Если да, то ничего не делаем. Если нет, переходим к следующему шагу
+- Проверяем, активна ли закладка. Если да, то ничего не делаем - переход осуществлен. Если нет, переходим к следующему шагу
 - Кликаем на закладку
 - Ждём, когда закладка станет активна
 
-Проверить, что элемент содержит заданное значение в атрибуте `class` можно так (`query` - заданный элемент):
+Проверить, что элемент `query` содержит заданное значение в атрибуте `class` можно так:
 ```scala
 def doesClassContain(value: String): Boolean =
     (for {
@@ -55,10 +60,10 @@ def doesClassContain(value: String): Boolean =
 
 Клик на элемент проходит стандартно: `clickOn(query)`
 
-Ожидание, когда атрибут `class` элемента будет содержать заданное значение можно реализовать так:
+Ожидание, когда атрибут `class` элемента будет содержать заданное значение, можно реализовать так:
 ```scala
-def waitClassContain(value: String): Boolean = 
-new WebDriverWait(driver, Duration.ofSeconds(timeout)).until(ExpectedConditions.attributeContains(query.by, "class", value))
+def waitClassContain(value: String): Boolean =
+   webDriverWait(driver).until(ExpectedConditions.attributeContains(query.by, "class", value))
 ```
 
 Итого:
@@ -70,12 +75,12 @@ def clickCompact(): Unit =
     }
 ```
 
-4) Теперь, когда мы находимся на закладке **Compact** можно начать вычислять список всех сборных. 
-   Для этого нужно последовательно пройти все страницы и с каждой считать список.
+Теперь, когда мы находимся на закладке **Compact** можно начать вычисление списка всех сборных. 
+Для этого нужно последовательно пройти все страницы рейтинга и с каждой считать список.
    
 Логика будет такой:
-- Проверяем, достигли ли мы последней страницы
-- Если нет, то считываем список со страницы
+- Проверяем, достигли ли последней страницы
+- Если нет, считываем список со страницы
 - Переходим на следующую страницу и возвращаемся в первый пункт
 - Если дошли до последней страницы, то считываем список с неё
 
@@ -94,6 +99,7 @@ urls ++= rankingListPage.countriesList().toBuffer
 на следующую страницу (css локатор `li.naechste-seite > a`):
 ```scala
 val nextPageQuery: Query = cssSelector("li.naechste-seite > a")
+
 def isPresent: Boolean = find(nextPageQuery).isDefined
 ```
 
@@ -112,17 +118,69 @@ def countriesList(): Seq[Country] =
 ```scala
 val selectedPageQuery: Query = cssSelector("li.selected > a")
 
-def normalizeSpaceText: String =
-  find(query).map(_.text.replaceAll("\\s", " ").trim).getOrElse("")
-  
 def clickNextPage(): Unit = {
-  val nextPage = selectedPageQuery.normalizeSpaceText.toInt + 1
+  val nextPage = find(selectedPageQuery).map(_.text).get().toInt + 1
   clickOn(nextPageQuery)
-  val _ = new WebDriverWait(driver, Duration.ofSeconds(timeout)).until(ExpectedConditions.textToBe(selectedPageQuery.by, nextPage.toString))
+  val _ = webDriverWait(driver).until(ExpectedConditions.textToBe(selectedPageQuery.by, nextPage.toString))
 }
 ```
 
-5) После соединения всего воедино получим следующий список (на 13 марта 2021):
+Соединяем все воедино:
+
+```scala
+import org.openqa.selenium.WebDriver
+import com.github.artemkorsakov.containers.BaseContainer
+import org.scalatestplus.selenium.WebBrowser._
+import com.github.artemkorsakov.query.UpQuery._
+import com.github.artemkorsakov.query.Waiter
+import org.scalatestplus.selenium.Page
+import org.openqa.selenium.support.ui.ExpectedConditions
+
+case class Country(name: String, url: Option[String])
+
+class RankingListPage(implicit val webDriver: WebDriver) extends Page with Waiter {
+  val url                      = "https://www.transfermarkt.com/statistik/weltrangliste/statistik"
+  val compactQuery: Query      = xpath("//div[.='Compact']")
+  val tableQuery: Query        = xpath("//table/tbody//a[count(*)=0]")
+  val nextPageQuery: Query     = cssSelector("li.naechste-seite > a")
+  val selectedPageQuery: Query = cssSelector("li.selected > a")
+
+  def clickCompact(): Unit =
+    if (!compactQuery.doesClassContain("active")) {
+      clickOn(compactQuery)
+      val _ = compactQuery.waitClassContain("active")
+    }
+
+  def countriesList(): Seq[Country] =
+    findAll(tableQuery).map(el => Country(el.text.trim, el.attribute("href"))).toSeq
+
+  def clickNextPage(): Unit = {
+    val nextPage = selectedPageQuery.normalizeSpaceText.toInt + 1
+    clickOn(nextPageQuery)
+    val _ = webDriverWait(webDriver).until(ExpectedConditions.textToBe(selectedPageQuery.by, nextPage.toString))
+  }
+
+  def waitLoad(): Unit = {
+    val _ = compactQuery.waitVisible()
+  }
+}
+
+implicit lazy val webDriver: WebDriver = ??? /** from container */
+
+val rankingListPage = new RankingListPage()
+go to rankingListPage
+rankingListPage.waitLoad()
+rankingListPage.clickCompact()
+val urls = scala.collection.mutable.ArrayBuffer.empty[Country]
+while (rankingListPage.nextPageQuery.isPresent) {
+  urls ++= rankingListPage.countriesList().toBuffer
+  rankingListPage.clickNextPage()
+}
+urls ++= rankingListPage.countriesList().toBuffer
+```
+
+Получаем следующий список (на 13 марта 2021):
+
 | Country name | Url                                                                                    |
 | ------------ |:--------------------------------------------------------------------------------------:|
 | Belgium      | [link](https://www.transfermarkt.com/belgien/startseite/verein/3382)                   |
@@ -134,4 +192,6 @@ def clickNextPage(): Unit = {
 | San Marino   | [link](https://www.transfermarkt.com/san-marino/startseite/verein/10521)               |
 
 
-### Составление списка игроков заданной сборной
+### Team player list
+
+Теперь, когда у нас есть url страны можно составить список игроков сборной.

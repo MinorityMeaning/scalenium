@@ -16,13 +16,13 @@ class FootballTeams extends AnyFlatSpec with BaseContainer with Matchers {
     rankingListPage.clickCompact()
     val urls = scala.collection.mutable.ArrayBuffer.empty[Country]
     while (rankingListPage.nextPageQuery.isPresent) {
+      log.info(s"Page ${rankingListPage.selectedPageQuery.normalizeSpaceText}")
       urls ++= rankingListPage.countriesList().toBuffer
       rankingListPage.clickNextPage()
     }
     urls ++= rankingListPage.countriesList().toBuffer
 
     urls.length should be > 200
-    log.info(urls.toString())
   }
 
 }
