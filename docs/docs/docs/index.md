@@ -18,7 +18,7 @@ libraryDependencies += "com.github.artemkorsakov" %% "scalenium-core" % "@VERSIO
 
 #### Set configuration
 
-Create an `reference.conf` file and add it as a resource of your application 
+Create a `reference.conf` file and add it as a resource of your application 
 (`src/main/resources` or `src/test/resources` (for tests)):
 
 ```text
