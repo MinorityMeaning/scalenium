@@ -144,24 +144,24 @@ val lintFlags =
   }
 
 lazy val commonSettings =
-addCompilerPlugins(libs, "kind-projector") ++ sharedCommonSettings ++ scalacAllSettings ++ Seq(
-  organization := "com.github.artemkorsakov",
-  parallelExecution in Test := false,
-  scalaVersion := Scala213,
-  crossScalaVersions := Seq(Scala212, Scala213),
-  scalacOptions ++= Seq(
-    "-deprecation",
-    "-encoding",
-    "UTF-8",
-    "-language:experimental.macros",
-    "-feature",
-    "-unchecked",
-    "-Xfatal-warnings",
-    "-Ywarn-numeric-widen",
-    "-Ywarn-value-discard",
-    lintFlags.value
+  addCompilerPlugins(libs, "kind-projector") ++ sharedCommonSettings ++ scalacAllSettings ++ Seq(
+    organization := "com.github.artemkorsakov",
+    parallelExecution in Test := false,
+    scalaVersion := Scala213,
+    crossScalaVersions := Seq(Scala212, Scala213),
+    scalacOptions ++= Seq(
+      "-deprecation",
+      "-encoding",
+      "UTF-8",
+      "-language:experimental.macros",
+      "-feature",
+      "-unchecked",
+      "-Xfatal-warnings",
+      "-Ywarn-numeric-widen",
+      "-Ywarn-value-discard",
+      lintFlags.value
+    )
   )
-)
 
 lazy val commonJsSettings = Seq(scalaJSStage in Global := FastOptStage)
 

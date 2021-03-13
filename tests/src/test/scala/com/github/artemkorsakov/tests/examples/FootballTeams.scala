@@ -1,7 +1,7 @@
 package com.github.artemkorsakov.tests.examples
 
 import com.github.artemkorsakov.containers.BaseContainer
-import com.github.artemkorsakov.examples.fifa.{Country, RankingListPage}
+import com.github.artemkorsakov.examples.fifa.{ Country, RankingListPage }
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import org.scalatestplus.selenium.WebBrowser._
