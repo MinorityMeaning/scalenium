@@ -3,5 +3,6 @@ package com.github.artemkorsakov.spec
 import org.scalatest.Tag
 
 trait Tags {
-  val example: Tag = Tag("example")
+  val healthCheckTest: Tag = Tag("HealthCheckTest")
+  val example: Tag         = Tag("example")
 }
