@@ -79,13 +79,13 @@ def clickCompact(): Unit =
    
 Логика будет такой:
 - Проверяем, достигли ли последней страницы
-- Если нет, считываем список со страницы, переходим на следующую и возвращаемся в первый пункт
+- Если нет, считываем список со страницы, переходим на следующую и возвращаемся на пункт выше
 - Если дошли до последней страницы, то считываем список с неё
 
 ![Next button](https://raw.githubusercontent.com/artemkorsakov/scalenium/NI-football_teams/docs/src/main/resources/microsite/img/examples/fifa/next_button.png)
 
 Для того, чтобы проверить, достигли ли мы последней страницы, достаточно проверить, есть ли кнопка перехода 
-на следующую страницу (css локатор `li.naechste-seite > a`):
+на следующую страницу (см. скрин выше, css локатор `li.naechste-seite > a`):
 ```scala
 val nextPageQuery: Query = cssSelector("li.naechste-seite > a")
 
@@ -133,6 +133,9 @@ def clickNextPage(): Unit = {
 
 Эта задача ещё более простая, потому что страница сборной страны содержит практически все те же элементы,
 что и страница рейтинга сборных. Изменения будут касаться только элемента `tableQuery`.
+
+![Player list](https://raw.githubusercontent.com/artemkorsakov/scalenium/NI-football_teams/docs/src/main/resources/microsite/img/examples/fifa/players_list.png)
+
 Ссылка на страницу игрока - это xpath локатор `//table/tbody//span[@class='hide-for-small']/a[count(*)=0]`:
 ```scala
 val tableQuery: Query = xpath("//table/tbody//span[@class='hide-for-small']/a[count(*)=0]")
@@ -141,6 +144,8 @@ val tableQuery: Query = xpath("//table/tbody//span[@class='hide-for-small']/a[co
 ### Player's citizenship
 
 Осталось только определить гражданство игрока сборной, пользуясь его страницей, найденной на предыдущем этапе.
+
+![Player list](https://raw.githubusercontent.com/artemkorsakov/scalenium/NI-football_teams/docs/src/main/resources/microsite/img/examples/fifa/cityzenship.png)
 
 Для начала нужно перейти на закладку Profile. Мы уже переходили на закладку на предыдущих страницах.
 Здесь будет то же самое, за исключением одного нюанса: если раньше у активной закладки менялся атрибут  `class`,
