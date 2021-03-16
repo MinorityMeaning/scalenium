@@ -5,7 +5,7 @@ realization: examples/FootballTeams.scala
 ---
 
 ### Task: 
-Сколько человек в каждой футбольной сборной имеют более одного гражданства и что это за гражданства?
+Сколько человек в каждой футбольной сборной имеют более одного гражданства?
 
 За основу возьмем данные с сайта [transfermarkt.com](https://www.transfermarkt.com/):
 - [рейтинг сборных](https://www.transfermarkt.com/statistik/weltrangliste/statistik)
@@ -29,7 +29,7 @@ go to rankingListPage
 После перехода прежде чем работать со страницей необходимо дождаться окончания отрисовки её элементов. 
 Будем ориентироваться на кнопку **Compact** и дождемся, когда она станет видима. 
 
-<img src="./doc/src/main/resources/microsite/img/fifa_ranking_list.png" alt="Compact button"></img>
+![Compact button](https://raw.githubusercontent.com/artemkorsakov/scalenium/NI-football_teams/docs/src/main/resources/microsite/img/examples/fifa/fifa_ranking_list.png)
 
 Xpath локатор кнопки будет таким:
 ```scala
@@ -41,10 +41,10 @@ val compactQuery: Query = xpath("//div[.='Compact']")
 new WebDriverWait(driver, Duration.ofSeconds(timeout)).until(ExpectedConditions.visibilityOfElementLocated(query.by))
 ```
 
-Рассмотрим переход на закладку **Compact**.
+#### Рассмотрим переход на закладку **Compact**.
 
 Переход на закладку будет состоять из следующих шагов:
-- Проверяем, активна ли закладка (активная закладка в данном случае в классе содержит "active").
+- Проверяем, активна ли закладка (активная закладка в данном случае в атрибуте `class` содержит "active").
 - Если да, то ничего не делаем — переход осуществлен.
 - Если нет, то кликаем на закладку и ждём, когда закладка станет активна
 
@@ -81,6 +81,8 @@ def clickCompact(): Unit =
 - Проверяем, достигли ли последней страницы
 - Если нет, считываем список со страницы, переходим на следующую и возвращаемся в первый пункт
 - Если дошли до последней страницы, то считываем список с неё
+
+![Next button](https://raw.githubusercontent.com/artemkorsakov/scalenium/NI-football_teams/docs/src/main/resources/microsite/img/examples/fifa/next_button.png)
 
 Для того, чтобы проверить, достигли ли мы последней страницы, достаточно проверить, есть ли кнопка перехода 
 на следующую страницу (css локатор `li.naechste-seite > a`):
