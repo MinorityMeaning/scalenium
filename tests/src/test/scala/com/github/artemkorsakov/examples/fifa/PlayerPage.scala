@@ -20,8 +20,4 @@ case class PlayerPage(url: String)(implicit val webDriver: WebDriver) extends Pa
   def citizenship(): Seq[String] =
     findAll(citizenshipQuery).flatMap(_.attribute("title")).toSeq
 
-  def waitLoad(): Unit = {
-    val _ = profileQuery.waitVisible()
-  }
-
 }

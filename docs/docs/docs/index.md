@@ -32,4 +32,5 @@ selenium {
 #### Remote run in [Testcontainers](https://github.com/testcontainers/testcontainers-scala#selenium)
 
 - Install [docker](https://docs.docker.com/get-docker/)
+- Create spec extending `BaseContainer`
 - Run tests
