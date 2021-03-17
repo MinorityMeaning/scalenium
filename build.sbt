@@ -61,7 +61,8 @@ lazy val coreJVM = coreM.jvm
 lazy val coreJS  = coreM.js
 lazy val coreM = module("core", CrossType.Pure)
   .settings(
-    libraryDependencies ++= Dependencies.root.value
+    libraryDependencies ++= Dependencies.root.value,
+    libs.dependencies("scalatest", "scalacheck")
   )
 
 lazy val tests    = prj(testsM)
@@ -70,8 +71,7 @@ lazy val testsJS  = testsM.js
 lazy val testsM = module("tests", CrossType.Pure)
   .dependsOn(coreM)
   .settings(
-    noPublishSettings,
-    libs.testDependencies("scalatest", "scalacheck")
+    noPublishSettings
   )
 
 /** Docs - Generates and publishes the scaladoc API documents and the project web site using sbt-microsite.
@@ -144,24 +144,24 @@ val lintFlags =
   }
 
 lazy val commonSettings =
-  addCompilerPlugins(libs, "kind-projector") ++ sharedCommonSettings ++ scalacAllSettings ++ Seq(
-    organization := "com.github.artemkorsakov",
-    parallelExecution in Test := false,
-    scalaVersion := Scala213,
-    crossScalaVersions := Seq(Scala212, Scala213),
-    scalacOptions ++= Seq(
-      "-deprecation",
-      "-encoding",
-      "UTF-8",
-      "-language:experimental.macros",
-      "-feature",
-      "-unchecked",
-      "-Xfatal-warnings",
-      "-Ywarn-numeric-widen",
-      "-Ywarn-value-discard",
-      lintFlags.value
-    )
+addCompilerPlugins(libs, "kind-projector") ++ sharedCommonSettings ++ scalacAllSettings ++ Seq(
+  organization := "com.github.artemkorsakov",
+  parallelExecution in Test := false,
+  scalaVersion := Scala213,
+  crossScalaVersions := Seq(Scala212, Scala213),
+  scalacOptions ++= Seq(
+    "-deprecation",
+    "-encoding",
+    "UTF-8",
+    "-language:experimental.macros",
+    "-feature",
+    "-unchecked",
+    "-Xfatal-warnings",
+    "-Ywarn-numeric-widen",
+    "-Ywarn-value-discard",
+    lintFlags.value
   )
+)
 
 lazy val commonJsSettings = Seq(scalaJSStage in Global := FastOptStage)
 

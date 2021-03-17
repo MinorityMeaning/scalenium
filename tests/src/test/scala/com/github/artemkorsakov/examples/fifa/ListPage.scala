@@ -5,20 +5,20 @@ import org.openqa.selenium.WebDriver
 import org.scalatestplus.selenium.WebBrowser._
 
 abstract class ListPage(implicit val webDriver: WebDriver) {
-  val compactQuery: Query = xpath("//div[.='Compact']")
-  val tableQuery: Query
+  val compactTab: Query = xpath("//div[.='Compact']")
+  val itemLink: Query
 
   def clickCompact(): Unit =
-    if (!compactQuery.doesClassContain("active")) {
-      clickOn(compactQuery)
-      val _ = compactQuery.waitClassContain("active")
+    if (!compactTab.doesClassContain("active")) {
+      clickOn(compactTab)
+      val _ = compactTab.waitClassContain("active")
     }
 
-  def items(): Seq[NameWithLink] =
-    findAll(tableQuery).map(el => NameWithLink(el.text.trim, el.attribute("href"))).toSeq
+  def items(): Seq[(String, Option[String])] =
+    findAll(itemLink).map(el => (el.text.trim, el.attribute("href"))).toSeq
 
   def waitLoad(): Unit = {
-    val _ = compactQuery.waitVisible()
+    val _ = compactTab.waitVisible()
   }
 
 }

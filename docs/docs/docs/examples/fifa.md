@@ -18,6 +18,12 @@ realization: examples/FootballTeams.scala
 Переход на заданную страницу, если она реализует trait `org.scalatestplus.selenium.Page`, может осуществляться так: 
 
 ```scala
+import org.scalatestplus.selenium.Page
+import org.scalatestplus.selenium.WebBrowser._
+import org.openqa.selenium.WebDriver
+
+implicit def webDriver: WebDriver = ??? /* from container */
+
 class RankingListPage(implicit val webDriver: WebDriver) extends Page {
    val url = "https://www.transfermarkt.com/statistik/weltrangliste/statistik"
 }
@@ -33,12 +39,21 @@ go to rankingListPage
 
 Xpath локатор кнопки будет таким:
 ```scala
-val compactQuery: Query = xpath("//div[.='Compact']")
+import org.scalatestplus.selenium.WebBrowser._
+
+val compactTab: Query = xpath("//div[.='Compact']")
 ```
    
-Ожидание видимости элемента осуществляется так (`timeout` можно задать в конфиге, `query` - заданный элемент):
+Ожидание видимости элемента осуществляется так (`timeout: Int` можно задать в конфиге, `query: Query` - заданный элемент):
 ```scala
-new WebDriverWait(driver, Duration.ofSeconds(timeout)).until(ExpectedConditions.visibilityOfElementLocated(query.by))
+import org.openqa.selenium._
+import org.openqa.selenium.support.ui.WebDriverWait
+import org.openqa.selenium.support.ui.ExpectedConditions
+import org.scalatestplus.selenium.WebBrowser._
+import java.time.Duration
+
+def waitVisible(query: Query, timeout: Int)(implicit webDriver: WebDriver): WebElement =
+    new WebDriverWait(webDriver, Duration.ofSeconds(timeout)).until(ExpectedConditions.visibilityOfElementLocated(query.by))
 ```
 
 #### Рассмотрим переход на закладку **Compact**.
@@ -48,7 +63,7 @@ new WebDriverWait(driver, Duration.ofSeconds(timeout)).until(ExpectedConditions.
 - Если да, то ничего не делаем — переход осуществлен.
 - Если нет, то кликаем на закладку и ждём, когда закладка станет активна
 
-Проверить, что элемент `query` содержит заданное значение в атрибуте `class` можно так:
+Проверить, что элемент `query: Query` содержит заданное значение в атрибуте `class` можно так:
 ```scala
 def doesClassContain(value: String): Boolean =
     (for {
@@ -68,9 +83,9 @@ def waitClassContain(value: String): Boolean =
 Итого:
 ```scala
 def clickCompact(): Unit =
-    if (!compactQuery.doesClassContain("active")) {
-      clickOn(compactQuery)
-      val _ = compactQuery.waitClassContain("active")
+    if (!compactTab.doesClassContain("active")) {
+      clickOn(compactTab)
+      val _ = compactTab.waitClassContain("active")
     }
 ```
 
@@ -87,30 +102,30 @@ def clickCompact(): Unit =
 Для того, чтобы проверить, достигли ли мы последней страницы, достаточно проверить, есть ли кнопка перехода 
 на следующую страницу (см. скрин выше, css локатор `li.naechste-seite > a`):
 ```scala
-val nextPageQuery: Query = cssSelector("li.naechste-seite > a")
+val nextPageLink: Query = cssSelector("li.naechste-seite > a")
 
-def isPresent: Boolean = find(nextPageQuery).isDefined
+def isPresent: Boolean = find(nextPageLink).isDefined
 ```
 
 Для того, чтобы считать список стран, необходимо найти все элементы с xpath локатором `//table/tbody//a[count(*)=0]` 
 и у каждого элемента считать **text** и значение атрибута **href**:
 ```scala
-val tableQuery: Query = xpath("//table/tbody//a[count(*)=0]")
+val itemLink: Query = xpath("//table/tbody//a[count(*)=0]")
 
 def items(): Seq[(String, Option[String])] =
-  findAll(tableQuery).map(el => (el.text.trim, el.attribute("href"))).toSeq
+  findAll(itemLink).map(el => (el.text.trim, el.attribute("href"))).toSeq
 ```
 
-Для перехода на следующую страницу мало кликнуть на кнопку `nextPageQuery`, необходимо ещё дождаться, когда этот 
+Для перехода на следующую страницу мало кликнуть на кнопку `nextPageLink`, необходимо ещё дождаться, когда этот 
 переход произойдет. Мы можем считать номер текущей страницы (css локатор `li.selected > a`), а после клика
 на следующую страницу дождаться, когда номер текущей страницы станет на 1 больше:
 ```scala
-val selectedPageQuery: Query = cssSelector("li.selected > a")
+val selectedPageLink: Query = cssSelector("li.selected > a")
 
 def clickNextPage(): Unit = {
-  val nextPage = find(selectedPageQuery).map(_.text).get().toInt + 1
-  clickOn(nextPageQuery)
-  val _ = webDriverWait(driver).until(ExpectedConditions.textToBe(selectedPageQuery.by, nextPage.toString))
+  val nextPage = find(selectedPageLink).map(_.text).get().toInt + 1
+  clickOn(nextPageLink)
+  val _ = webDriverWait(driver).until(ExpectedConditions.textToBe(selectedPageLink.by, nextPage.toString))
 }
 ```
 
@@ -131,14 +146,14 @@ def clickNextPage(): Unit = {
 
 Теперь, когда у нас есть url страны можно составить список игроков сборной.
 
-Эта задача ещё более простая, потому что страница сборной страны содержит практически все те же элементы,
-что и страница рейтинга сборных. Изменения будут касаться только элемента `tableQuery`.
+Эта задача ещё более простая, потому что страница сборной страны содержит практически все те же необходимые нам элементы,
+что и страница рейтинга сборных. Изменения будут касаться только элемента `itemLink` (ссылка на игрока).
 
 ![Player list](https://raw.githubusercontent.com/artemkorsakov/scalenium/NI-football_teams/docs/src/main/resources/microsite/img/examples/fifa/players_list.png)
 
 Ссылка на страницу игрока - это xpath локатор `//table/tbody//span[@class='hide-for-small']/a[count(*)=0]`:
 ```scala
-val tableQuery: Query = xpath("//table/tbody//span[@class='hide-for-small']/a[count(*)=0]")
+val itemLink: Query = xpath("//table/tbody//span[@class='hide-for-small']/a[count(*)=0]")
 ```
 
 ### Player's citizenship
@@ -147,7 +162,9 @@ val tableQuery: Query = xpath("//table/tbody//span[@class='hide-for-small']/a[co
 
 ![Player list](https://raw.githubusercontent.com/artemkorsakov/scalenium/NI-football_teams/docs/src/main/resources/microsite/img/examples/fifa/cityzenship.png)
 
-Для начала нужно перейти на закладку Profile. Мы уже переходили на закладку на предыдущих страницах.
+Для начала нужно перейти на закладку Profile. 
+
+Мы уже переходили на закладку на предыдущих страницах.
 Здесь будет то же самое, за исключением одного нюанса: если раньше у активной закладки менялся атрибут  `class`,
 то теперь этот атрибут меняется не у самой ссылки, а у её родителя. Кстати, в этот раз немецкие разработчики сайта
 значение атрибута `class` активного элемента не стали переводить на английский, а оставили на немецком - "aktiv":
@@ -167,8 +184,8 @@ def clickProfile(): Unit =
   }
 ```
 
-Теперь осталось только определить гражданство. Для этого возьмем картинку из соответствующего поля и считаем её атрибут
-"title":
+Теперь осталось только определить гражданство. Для этого возьмем элемент `img` из строки Citizenship 
+и считаем её атрибут "title":
 
 ```scala
 val citizenshipQuery: Query = xpath("//th[.='Citizenship:']/following-sibling::td/img")
@@ -179,6 +196,8 @@ def citizenship(): Seq[String] = findAll(citizenshipQuery).flatMap(_.attribute("
 Вот и все, все страницы заполнены, осталось только написать автотест.
 
 ### Application
+
+
 
 
 
