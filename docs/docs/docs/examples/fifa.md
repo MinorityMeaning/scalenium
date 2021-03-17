@@ -160,9 +160,9 @@ val itemLink: Query = xpath("//table/tbody//span[@class='hide-for-small']/a[coun
 
 Осталось только определить гражданство игрока сборной, пользуясь его страницей, найденной на предыдущем этапе.
 
-![Player list](https://raw.githubusercontent.com/artemkorsakov/scalenium/NI-football_teams/docs/src/main/resources/microsite/img/examples/fifa/cityzenship.png)
+Для начала нужно перейти на закладку **Profile**.
 
-Для начала нужно перейти на закладку **Profile**. 
+![Player list](https://raw.githubusercontent.com/artemkorsakov/scalenium/NI-football_teams/docs/src/main/resources/microsite/img/examples/fifa/cityzenship.png)
 
 Мы уже переходили на закладку на предыдущих страницах.
 Здесь будет то же самое, за исключением одного нюанса: если раньше у активной закладки менялся атрибут  `class`,
@@ -184,18 +184,83 @@ def clickProfile(): Unit =
   }
 ```
 
-Теперь осталось только определить гражданство. Для этого возьмем элемент `img` из строки Citizenship 
+Теперь осталось только определить гражданство. Для этого возьмем элемент `img` из строки **Citizenship:** 
 и считаем её атрибут "title":
 
 ```scala
-val citizenshipQuery: Query = xpath("//th[.='Citizenship:']/following-sibling::td/img")
+val citizenshipImg: Query = xpath("//th[.='Citizenship:']/following-sibling::td/img")
 
-def citizenship(): Seq[String] = findAll(citizenshipQuery).flatMap(_.attribute("title")).toSeq
+def citizenship(): Seq[String] = findAll(citizenshipImg).flatMap(_.attribute("title")).toSeq
 ```
 
 Вот и все, все страницы заполнены, осталось только написать автотест.
 
 ### Application
+
+```scala
+import com.github.artemkorsakov.query.UpQuery._
+import org.openqa.selenium.WebDriver
+import org.scalatestplus.selenium.WebBrowser._
+
+abstract class ListPage(implicit val webDriver: WebDriver) {
+  val compactTab: Query = xpath("//div[.='Compact']")
+  val itemLink: Query
+
+  def clickCompact(): Unit =
+    if (!compactTab.doesClassContain("active")) {
+      clickOn(compactTab)
+      val _ = compactTab.waitClassContain("active")
+    }
+
+  def items(): Seq[(String, Option[String])] =
+    findAll(itemLink).map(el => (el.text.trim, el.attribute("href"))).toSeq
+
+  def waitLoad(): Unit = {
+    val _ = compactTab.waitVisible()
+  }
+
+}
+
+import com.github.artemkorsakov.query.Waiter
+import org.scalatestplus.selenium.Page
+
+case class CountryPage(url: String)(implicit override val webDriver: WebDriver) extends ListPage with Page with Waiter {
+  val itemLink: Query = xpath("//table/tbody//span[@class='hide-for-small']/a[count(*)=0]")
+
+}
+
+import org.openqa.selenium.support.ui.ExpectedConditions
+
+class RankingListPage(implicit override val webDriver: WebDriver) extends ListPage with Page with Waiter {
+  val url                      = "https://www.transfermarkt.com/statistik/weltrangliste/statistik"
+  val itemLink: Query        = xpath("//table/tbody//a[count(*)=0]")
+  val nextPageLink: Query     = cssSelector("li.naechste-seite > a")
+  val selectedPageLink: Query = cssSelector("li.selected > a")
+
+  def clickNextPage(): Unit = {
+    val nextPage = selectedPageLink.normalizeSpaceText.toInt + 1
+    clickOn(nextPageLink)
+    val _ = webDriverWait(webDriver).until(ExpectedConditions.textToBe(selectedPageLink.by, nextPage.toString))
+  }
+
+}
+
+case class PlayerPage(url: String)(implicit val webDriver: WebDriver) extends Page with Waiter {
+  val profileTab: Query     = xpath("//li[@id='profile']")
+  val profileLink: Query    = xpath(s"${profileTab.queryString}/a")
+  val citizenshipImg: Query = xpath("//th[.='Citizenship:']/following-sibling::td/img")
+
+  def clickProfile(): Unit =
+    if (!profileTab.doesClassContain("aktiv")) {
+      clickOn(profileLink)
+      val _ = profileTab.waitClassContain("aktiv")
+    }
+
+  def citizenship(): Seq[String] =
+    findAll(citizenshipImg).flatMap(_.attribute("title")).toSeq
+
+}
+```
 
 
 
