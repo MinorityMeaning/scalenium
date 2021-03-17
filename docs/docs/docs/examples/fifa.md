@@ -162,7 +162,7 @@ val itemLink: Query = xpath("//table/tbody//span[@class='hide-for-small']/a[coun
 
 ![Player list](https://raw.githubusercontent.com/artemkorsakov/scalenium/NI-football_teams/docs/src/main/resources/microsite/img/examples/fifa/cityzenship.png)
 
-Для начала нужно перейти на закладку Profile. 
+Для начала нужно перейти на закладку **Profile**. 
 
 Мы уже переходили на закладку на предыдущих страницах.
 Здесь будет то же самое, за исключением одного нюанса: если раньше у активной закладки менялся атрибут  `class`,
@@ -174,13 +174,13 @@ val itemLink: Query = xpath("//table/tbody//span[@class='hide-for-small']/a[coun
 Создадим два элемента: ссылку и её родителя, а затем определим переход на закладку так:
 
 ```scala
-val profileQuery: Query     = xpath("//li[@id='profile']")
-val profileLinkQuery: Query = xpath(s"${profileQuery.queryString}/a")
+val profileTab: Query  = xpath("//li[@id='profile']")
+val profileLink: Query = xpath("//li[@id='profile']/a")
 
 def clickProfile(): Unit = 
-  if (!profileQuery.doesClassContain("aktiv")) {
-    clickOn(profileLinkQuery)
-    val _ = profileQuery.waitClassContain("aktiv")
+  if (!profileTab.doesClassContain("aktiv")) {
+    clickOn(profileLink)
+    val _ = profileTab.waitClassContain("aktiv")
   }
 ```
 
