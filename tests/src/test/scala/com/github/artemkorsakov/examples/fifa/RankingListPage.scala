@@ -9,7 +9,7 @@ import org.scalatestplus.selenium.WebBrowser._
 
 class RankingListPage(implicit override val webDriver: WebDriver) extends ListPage with Page with Waiter {
   val url                     = "https://www.transfermarkt.com/statistik/weltrangliste/statistik"
-  val itemLink: Query         = xpath("//table/tbody//a[count(*)=0]")
+  val itemLink: Query         = xpath("//table/tbody/tr[td[.='CONMEBOL']]//a[count(*)=0]")
   val nextPageLink: Query     = cssSelector("li.naechste-seite > a")
   val selectedPageLink: Query = cssSelector("li.selected > a")
 

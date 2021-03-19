@@ -44,7 +44,7 @@ import org.scalatestplus.selenium.WebBrowser._
 val compactTab: Query = xpath("//div[.='Compact']")
 ```
    
-Ожидание видимости элемента осуществляется так (`timeout: Int` можно задать в конфиге, `query: Query` - заданный элемент):
+Ожидание видимости элемента осуществляется так (`timeout` можно задать в конфиге, `query` - заданный элемент):
 ```scala
 import org.openqa.selenium._
 import org.openqa.selenium.support.ui.WebDriverWait
@@ -108,7 +108,9 @@ def isPresent: Boolean = find(nextPageLink).isDefined
 ```
 
 Для того, чтобы считать список стран, необходимо найти все элементы с xpath локатором `//table/tbody//a[count(*)=0]` 
+(или `//table/tbody/tr[td[.='CONMEBOL']]//a[count(*)=0]` - если интересна только одна конфедерация) 
 и у каждого элемента считать **text** и значение атрибута **href**:
+
 ```scala
 val itemLink: Query = xpath("//table/tbody//a[count(*)=0]")
 
@@ -117,8 +119,11 @@ def items(): Seq[(String, Option[String])] =
 ```
 
 Для перехода на следующую страницу мало кликнуть на кнопку `nextPageLink`, необходимо ещё дождаться, когда этот 
-переход произойдет. Мы можем считать номер текущей страницы (css локатор `li.selected > a`), а после клика
-на следующую страницу дождаться, когда номер текущей страницы станет на 1 больше:
+переход произойдет. 
+
+Чтобы удостовериться, что мы перешли на следующую страницу, мы можем считать номер текущей страницы 
+(css локатор `li.selected > a`), а после клика на `nextPageLink` дождаться, когда номер текущей страницы станет на 1 больше:
+
 ```scala
 val selectedPageLink: Query = cssSelector("li.selected > a")
 
@@ -193,9 +198,49 @@ val citizenshipImg: Query = xpath("//th[.='Citizenship:']/following-sibling::td/
 def citizenship(): Seq[String] = findAll(citizenshipImg).flatMap(_.attribute("title")).toSeq
 ```
 
-Вот и все, все страницы заполнены, осталось только написать автотест.
+Вот и все, все страницы заполнены, осталось только написать автотест и тогда получим следующий результат.
 
-### Application
+
+### Results (for Russia, Ukraine and Belarus)
+
+| Country name | % | Foreigners   |
+| ------------ |:------------:|:------------:|
+| Russia | 11% (3/28) | (Brazil (1) -> (Mário Fernandes), Kyrgyzstan (1) -> (Ilzat Akhmetov), Germany (1) -> (Roman Neustädter)) |
+| Ukraine | 9% (3/33) | (Brazil (2) -> (Marlos, Júnior Moraes), Hungary (1) -> (Igor Kharatin)) |
+| Belarus | 4% (1/25) | (Cameroon (1) -> (Maks Ebong)) |
+
+В наших сборных только 3 натурализированных игрока (и все из Бразилии). Остальные родились в СССР.
+
+
+### Results (for CONMEBOL)
+
+| Country name | % | Foreigners   |
+| ------------ |:------------:|:------------:|
+| Brazil | 36% (9/25) | List(Spain (3) -> (Casemiro, Bruno Guimarães, Vinícius Júnior), Italy (1) -> (Alex Telles), France (1) -> (Thiago Silva), Portugal (4) -> (Ederson, Marquinhos, Allan, Lucas Paquetá)) |
+| Argentina | 57% (13/23) | (Spain (2) -> (Gonzalo Montiel, Lionel Messi), Italy (11) -> (Lucas Martínez Quarta, Wálter Kannemann, Nicolás Tagliafico, Guido Rodríguez, Rodrigo de Paul, Giovani Lo Celso, Nicolás Domínguez, Ángel Di María, Joaquín Correa, Papu Gómez, Lucas Alario)) |
+| Uruguay | 51,5% (18/35) | (Spain (7) -> (José María Giménez, Sebastián Coates, Diego Godín, Agustín Oliveros, Damián Suárez, Lucas Torreira, Federico Valverde), Paraguay (1) -> (Rodrigo Muñoz), Italy (10) -> (Fernando Muslera, Martín Campaña, Sergio Rochet, Matías Viña, Franco Pizzichillo, Nahitan Nández, Matías Vecino, Giorgian de Arrascaeta, Diego Rossi, Cristhian Stuani)) |
+| Colombia | 22% (6/27) | (Spain (4) -> (Jeison Murillo, Johan Mojica, James Rodríguez, Luis Suárez), Argentina (1) -> (Frank Fabra), England (1) -> (Steven Alzate)) |
+| Chile | 21% (5/24) | (Haiti (1) -> (Jean Beausejour), Spain (3) -> (Claudio Bravo, Gary Medel, Fabián Orellana), Italy (1) -> (Luis Jiménez)) |
+| Peru | 33% (12/36) | (Venezuela (1) -> (Carlos Ascues), Spain (3) -> (Alexander Callens, Cristian Benavente, Sergio Peña), Uruguay (1) -> (Gabriel Costa), Italy (2) -> (Luis Abram, Gianluca Lapadula), Netherlands (1) -> (Renato Tapia), Switzerland (1) -> (Jean-Pierre Rhyner), Portugal (1) -> (André Carrillo), Croatia (1) -> (Raúl Ruidíaz), Lebanon (1) -> (Matías Succar)) |
+| Venezuela | 25% (7/28) | (Spain (4) -> (Roberto Rosales, Juanpi Añor, Darwin Machís, Fernando Aristeguieta), Switzerland (1) -> (Rolf Feltscher), England (1) -> (Luis Del Pino Mago), Colombia (1) -> (Jan Hurtado)) |
+| Paraguay | 21% (7/33) | (Spain (1) -> (Antonio Sanabria), Argentina (4) -> (Santiago Arzamendia, Gastón Giménez, Andrés Cubas, Raúl Bobadilla), Italy (2) -> (Antony Silva, Iván Piris)) |
+| Ecuador | 12% (4/33) | (Spain (3) -> (Erick Ferigra, Pervis Estupiñán, Leonardo Campana), Argentina (1) -> (Hernán Galíndez)) |
+| Bolivia | 25% (7/28) | (United States (2) -> (Adrián Jusino, Antonio Bustamante), Spain (1) -> (Jaume Cuéllar), Argentina (1) -> (Carlos Lampe), Brazil (1) -> (Marcelo Moreno), Switzerland (1) -> (Boris Cespedes), Portugal (1) -> (Erwin Sánchez)) |
+
+
+А вот в Южной Америке людей с двойным гражданством довольно много.
+Впрочем, это неудивительно: в чемпионатах ЕС жесткий лимит на легионеров (в заявке только 3 игрока с гражданством не ЕС),
+поэтому южноамериканцам, чтобы попасть в Европу, приходится либо пытаться получить гражданство бывшей митрополии 
+(Бразилия -> Португалия, остальные -> Испания), либо искать среди своих предков итальянцев.
+Второе не так сложно, как кажется. Во время Второй Мировой войны Южная Америка хоть и была на бумаге нейтральной, 
+по факту разделилась на два лагеря: Бразилия -> союзники, Аргентина + Уругвай -> фашисты.
+Поэтому неудивительно, что после 1945 года многие итальянцы в поисках лучшей жизни иммигрировали 
+из разрушенной фашисткой Италии в симпатизировавшим ей Аргентине и Уругваю.
+Поэтому современному аргентинцу или уругвайцу получить гражданство Италии не сложнее, чем человеку по фамилии 
+Зильберман - гражданство Израиля - кто-нибудь среди предков нужной национальности да найдётся!
+
+
+### Pages
 
 ```scala
 import com.github.artemkorsakov.query.UpQuery._
@@ -232,8 +277,8 @@ case class CountryPage(url: String)(implicit override val webDriver: WebDriver) 
 import org.openqa.selenium.support.ui.ExpectedConditions
 
 class RankingListPage(implicit override val webDriver: WebDriver) extends ListPage with Page with Waiter {
-  val url                      = "https://www.transfermarkt.com/statistik/weltrangliste/statistik"
-  val itemLink: Query        = xpath("//table/tbody//a[count(*)=0]")
+  val url                     = "https://www.transfermarkt.com/statistik/weltrangliste/statistik"
+  val itemLink: Query         = xpath("//table/tbody/tr[td[.='CONMEBOL']]//a[count(*)=0]")
   val nextPageLink: Query     = cssSelector("li.naechste-seite > a")
   val selectedPageLink: Query = cssSelector("li.selected > a")
 
@@ -262,8 +307,65 @@ case class PlayerPage(url: String)(implicit val webDriver: WebDriver) extends Pa
 }
 ```
 
+### Application
 
+```scala
+import com.github.artemkorsakov.containers.SeleniumContainerSuite
+import com.github.artemkorsakov.query.UpQuery._
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
+import scala.collection.mutable.ArrayBuffer
 
+class FootballTeams extends AnyFlatSpec with SeleniumContainerSuite with Matchers {
 
+  "FootballTeams" should "make a url list of national teams" in {
+    val urls = calculateCountriesUrls
+    log.info(s"Countries length - ${urls.length}")
+    urls.length should be > 0
+  }
 
+  it should "make a team player list" in {
+    val url = "https://www.transfermarkt.com/belgien/startseite/verein/3382"
+    val urls = calculatePlayersUrls(url)
+    log.info(s"Players length - ${urls.length}")
+    urls.length should be > 20
+  }
 
+  it should "get citizenship from the player's page" in {
+    val url = "https://www.transfermarkt.com/christian-benteke/profil/spieler/50201"
+    val citizenship = calculateCitizenship(url)
+    log.info(s"citizenship - $citizenship")
+    citizenship.should(contain("Belgium"))
+  }
+
+  private def calculateCountriesUrls: ArrayBuffer[(String, Option[String])] = {
+    val rankingListPage = new RankingListPage()
+    go to rankingListPage
+    rankingListPage.waitLoad()
+    rankingListPage.clickCompact()
+    val countriesUrls = scala.collection.mutable.ArrayBuffer.empty[(String, Option[String])]
+    while (rankingListPage.nextPageLink.isPresent) {
+      log.info(s"Ranking page ${rankingListPage.selectedPageLink.normalizeSpaceText}")
+      countriesUrls ++= rankingListPage.items().toBuffer
+      rankingListPage.clickNextPage()
+    }
+    log.info(s"Ranking page ${rankingListPage.selectedPageLink.normalizeSpaceText}")
+    countriesUrls ++= rankingListPage.items().toBuffer
+  }
+
+  private def calculatePlayersUrls(countryUrl: String): Seq[(String, Option[String])] = {
+    val countryPage = CountryPage(countryUrl)
+    go to countryPage
+    countryPage.waitLoad()
+    countryPage.clickCompact()
+    countryPage.items()
+  }
+
+  private def calculateCitizenship(playerUrl: String): Seq[String] = {
+    val playerPage = PlayerPage(playerUrl)
+    go to playerPage
+    playerPage.clickProfile()
+    playerPage.citizenship()
+  }
+}
+```
