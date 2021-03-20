@@ -107,9 +107,10 @@ val nextPageLink: Query = cssSelector("li.naechste-seite > a")
 def isPresent: Boolean = find(nextPageLink).isDefined
 ```
 
-Для того, чтобы считать список стран, необходимо найти все элементы с xpath локатором `//table/tbody//a[count(*)=0]` 
-(или `//table/tbody/tr[td[.='CONMEBOL']]//a[count(*)=0]` - если интересна только одна конфедерация) 
-и у каждого элемента считать **text** и значение атрибута **href**:
+Для того, чтобы считать список стран, необходимо найти все элементы с xpath локатором `//table/tbody//a[count(*)=0]`
+и у каждого элемента считать **text** и значение атрибута **href**
+(или `//table/tbody/tr[td[.='CONMEBOL']]//a[count(*)=0]` - если интересна только одна конфедерация, 
+например, самая маленькая - CONMEBOL(Южная Америка)):
 
 ```scala
 val itemLink: Query = xpath("//table/tbody//a[count(*)=0]")
@@ -209,7 +210,7 @@ def citizenship(): Seq[String] = findAll(citizenshipImg).flatMap(_.attribute("ti
 | Ukraine | 9% (3/33) | (Brazil (2) -> (Marlos, Júnior Moraes), Hungary (1) -> (Igor Kharatin)) |
 | Belarus | 4% (1/25) | (Cameroon (1) -> (Maks Ebong)) |
 
-В наших сборных только 3 натурализированных игрока (и все из Бразилии). Остальные родились в СССР.
+<br>В наших сборных только 3 натурализированных игрока (и все из Бразилии). Остальные родились в СССР.
 
 
 ### Results (for CONMEBOL)
@@ -227,8 +228,7 @@ def citizenship(): Seq[String] = findAll(citizenshipImg).flatMap(_.attribute("ti
 | Ecuador | 12% (4/33) | (Spain (3) -> (Erick Ferigra, Pervis Estupiñán, Leonardo Campana), Argentina (1) -> (Hernán Galíndez)) |
 | Bolivia | 25% (7/28) | (United States (2) -> (Adrián Jusino, Antonio Bustamante), Spain (1) -> (Jaume Cuéllar), Argentina (1) -> (Carlos Lampe), Brazil (1) -> (Marcelo Moreno), Switzerland (1) -> (Boris Cespedes), Portugal (1) -> (Erwin Sánchez)) |
 
-
-А вот в Южной Америке людей с двойным гражданством довольно много.
+<br>А вот в Южной Америке людей с двойным гражданством довольно много.
 Впрочем, это неудивительно: в чемпионатах ЕС жесткий лимит на легионеров (в заявке только 3 игрока с гражданством не ЕС),
 поэтому южноамериканцам, чтобы попасть в Европу, приходится либо пытаться получить гражданство бывшей митрополии 
 (Бразилия -> Португалия, остальные -> Испания), либо искать среди своих предков итальянцев.
@@ -305,11 +305,7 @@ case class PlayerPage(url: String)(implicit val webDriver: WebDriver) extends Pa
     findAll(citizenshipImg).flatMap(_.attribute("title")).toSeq
 
 }
-```
 
-### Application
-
-```scala
 import com.github.artemkorsakov.containers.SeleniumContainerSuite
 import com.github.artemkorsakov.query.UpQuery._
 import org.scalatest.flatspec.AnyFlatSpec
