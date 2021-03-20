@@ -29,7 +29,24 @@ selenium {
 }
 ```
 
-#### Remote run in [Testcontainers](https://github.com/testcontainers/testcontainers-scala#selenium)
+#### Create test
 
 - Install [docker](https://docs.docker.com/get-docker/)
-- Run tests
+- Create spec extending `SeleniumContainerSuite`. For example:
+  
+```scala
+import com.github.artemkorsakov.containers.SeleniumContainerSuite
+import com.github.artemkorsakov.query.UpQuery._
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatestplus.selenium.WebBrowser._
+
+class SeleniumDriverSpec extends AnyFlatSpec with SeleniumContainerSuite {
+
+  "Browser" should "show google" in {
+    go to "https://www.google.com/"
+    name("q").waitVisible()
+  }
+}
+```
+
+- Run spec

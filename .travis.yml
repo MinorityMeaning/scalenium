@@ -20,7 +20,7 @@ install:
     scripts/decrypt-keys.sh; fi
 
 script:
-  - sbt test
+  - sbt 'testOnly -- -n HealthCheckTest'
   - sbt scalafmtCheckAll scalafmtSbtCheck
 
 after_success:

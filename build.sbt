@@ -70,8 +70,7 @@ lazy val testsJS  = testsM.js
 lazy val testsM = module("tests", CrossType.Pure)
   .dependsOn(coreM)
   .settings(
-    noPublishSettings,
-    libs.testDependencies("scalatest", "scalacheck")
+    noPublishSettings
   )
 
 /** Docs - Generates and publishes the scaladoc API documents and the project web site using sbt-microsite.

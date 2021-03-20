@@ -5,9 +5,15 @@ title: "Examples"
 
 ## {{page.title}}
 
-В этом блоке рассматриваются примеры использования Scala + Selenium.
+В этом проекте разбираются примеры использования Selenium на Scala.
 
-### Почему используется [Testcontainers](https://github.com/testcontainers/testcontainers-scala#selenium)? 
+В интернете довольно мало примеров UI-автоматизации на языке Scala по нескольким причинам:
+- UI-автоматизация - это практически всегда тестирование "черного ящика", а значит можно выбрать любой язык. 
+  Чаще всего выбирают языки из стандартной пятерки Selenium.
+- Scala сложнее других языков, в частности, Java. И в Scala гораздо легче "наступить на грабли".
+- Очень сложно найти автоматизатора на Scala и уж тем более сложно такого специалиста обучить.
+
+Почему в примерах используется [Testcontainers](https://github.com/testcontainers/testcontainers-scala#selenium)? 
 
 Обычно для прогона Selenium тестов разворачивают [Selenium Grid](https://www.selenium.dev/documentation/en/grid/),
 но у этого способа есть несколько недостатков:
@@ -27,5 +33,7 @@ Testcontainers именно это и делает - разворачивает 
 
 Правда возникает проблема с локальным дебагом, но для этого всегда можно использовать отдельный [Spec](https://github.com/artemkorsakov/scalenium/blob/master/tests/src/test/scala/com/github/artemkorsakov/spec/LocalDebugSpec.scala)
 
-Рассмотрим пример использования Scala + Selenium на следующих примерах:
-- **Football teams**: Сколько человек в каждой футбольной сборной имеют более одного гражданства и что это за гражданства?
+
+### Scala + Selenium examples:
+
+- **Football teams**: Сколько человек в каждой футбольной сборной имеют более одного гражданства?
