@@ -35,7 +35,7 @@ go to rankingListPage
 После перехода прежде чем работать со страницей необходимо дождаться окончания отрисовки её элементов. 
 Будем ориентироваться на кнопку **Compact** и дождемся, когда она станет видима. 
 
-![Compact button](https://raw.githubusercontent.com/artemkorsakov/scalenium/NI-football_teams/docs/src/main/resources/microsite/img/examples/fifa/fifa_ranking_list.png)
+![Compact button](https://raw.githubusercontent.com/artemkorsakov/scalenium/master/docs/src/main/resources/microsite/img/examples/fifa/fifa_ranking_list.png)
 
 Xpath локатор кнопки будет таким:
 ```scala
@@ -97,7 +97,7 @@ def clickCompact(): Unit =
 - Если нет, считываем список со страницы, переходим на следующую и возвращаемся на пункт выше
 - Если дошли до последней страницы, то считываем список с неё
 
-![Next button](https://raw.githubusercontent.com/artemkorsakov/scalenium/NI-football_teams/docs/src/main/resources/microsite/img/examples/fifa/next_button.png)
+![Next button](https://raw.githubusercontent.com/artemkorsakov/scalenium/master/docs/src/main/resources/microsite/img/examples/fifa/next_button.png)
 
 Для того, чтобы проверить, достигли ли мы последней страницы, достаточно проверить, есть ли кнопка перехода 
 на следующую страницу (см. скрин выше, css локатор `li.naechste-seite > a`):
@@ -155,7 +155,7 @@ def clickNextPage(): Unit = {
 Эта задача ещё более простая, потому что страница сборной страны содержит практически все те же необходимые нам элементы,
 что и страница рейтинга сборных. Изменения будут касаться только элемента `itemLink` (ссылка на игрока).
 
-![Player list](https://raw.githubusercontent.com/artemkorsakov/scalenium/NI-football_teams/docs/src/main/resources/microsite/img/examples/fifa/players_list.png)
+![Player list](https://raw.githubusercontent.com/artemkorsakov/scalenium/master/docs/src/main/resources/microsite/img/examples/fifa/players_list.png)
 
 Ссылка на страницу игрока - это xpath локатор `//table/tbody//span[@class='hide-for-small']/a[count(*)=0]`:
 ```scala
@@ -168,14 +168,14 @@ val itemLink: Query = xpath("//table/tbody//span[@class='hide-for-small']/a[coun
 
 Для начала нужно перейти на закладку **Profile**.
 
-![Player list](https://raw.githubusercontent.com/artemkorsakov/scalenium/NI-football_teams/docs/src/main/resources/microsite/img/examples/fifa/cityzenship.png)
+![Player list](https://raw.githubusercontent.com/artemkorsakov/scalenium/master/docs/src/main/resources/microsite/img/examples/fifa/cityzenship.png)
 
 Мы уже переходили на закладку на предыдущих страницах.
 Здесь будет то же самое, за исключением одного нюанса: если раньше у активной закладки менялся атрибут  `class`,
 то теперь этот атрибут меняется не у самой ссылки, а у её родителя. Кстати, в этот раз немецкие разработчики сайта
 значение атрибута `class` активного элемента не стали переводить на английский, а оставили на немецком - "aktiv":
 
-![Aktiv](https://raw.githubusercontent.com/artemkorsakov/scalenium/NI-football_teams/docs/src/main/resources/microsite/img/examples/fifa/aktiv.png)
+![Aktiv](https://raw.githubusercontent.com/artemkorsakov/scalenium/master/docs/src/main/resources/microsite/img/examples/fifa/aktiv.png)
 
 Создадим два элемента: ссылку и её родителя, а затем определим переход на закладку так:
 

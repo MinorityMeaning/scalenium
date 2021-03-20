@@ -8,7 +8,7 @@ addCommandAlias("fmt", "all scalafmtSbt scalafmtAll")
 addCommandAlias("fmtCheck", "all scalafmtSbtCheck scalafmtCheckAll")
 addCommandAlias("gitSnapshots", ";set version in ThisBuild := git.gitDescribedVersion.value.get + \"-SNAPSHOT\"")
 
-val release_version = "0.0.1"
+val release_version = "0.1.0"
 val badge =
   "[![Maven Central](https://img.shields.io/maven-central/v/com.github.artemkorsakov/scalenium-core_2.13.svg?label=Maven%20Central&color=success)](https://search.maven.org/search?q=g:%22com.github.artemkorsakov%22%20AND%20a:%22scalenium-core_2.13%22)"
 
