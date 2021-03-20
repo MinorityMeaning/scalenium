@@ -2,6 +2,7 @@ package com.github.artemkorsakov.conf
 
 import enumeratum.EnumEntry._
 import enumeratum._
+import scala.collection.immutable.IndexedSeq
 
 sealed trait Browser extends EnumEntry with Snakecase
 
