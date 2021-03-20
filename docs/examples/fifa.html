@@ -1,0 +1,481 @@
+<!DOCTYPE html><html><head><title>Scalenium: Football teams</title><meta charset="utf-8" /><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Artem Korsakov" /><meta name="description" content="Selenium on Scala examples." /><meta name="og:image" content="/scalenium/img/poster.png" /><meta name="image" property="og:image" content="/scalenium/img/poster.png" /><meta name="og:title" content="Scalenium: Football teams" /><meta name="title" property="og:title" content="Scalenium: Football teams" /><meta name="og:site_name" content="Scalenium" /><meta name="og:url" content="https://github.com/artemkorsakov/scalenium" /><meta name="og:type" content="website" /><meta name="og:description" content="Selenium on Scala examples." /><link rel="icon" type="image/png" href="/scalenium/img/favicon.png" /><meta name="twitter:title" content="Scalenium: Football teams" /><meta name="twitter:image" content="https://artemkorsakov.github.io/scalenium/img/poster.png" /><meta name="twitter:description" content="Selenium on Scala examples." /><meta name="twitter:card" content="summary_large_image" /><link rel="icon" type="image/png" sizes="16x16" href="/scalenium/img/favicon16x16.png" /><link rel="icon" type="image/png" sizes="24x24" href="/scalenium/img/favicon24x24.png" /><link rel="icon" type="image/png" sizes="32x32" href="/scalenium/img/favicon32x32.png" /><link rel="icon" type="image/png" sizes="48x48" href="/scalenium/img/favicon48x48.png" /><link rel="icon" type="image/png" sizes="57x57" href="/scalenium/img/favicon57x57.png" /><link rel="icon" type="image/png" sizes="60x60" href="/scalenium/img/favicon60x60.png" /><link rel="icon" type="image/png" sizes="64x64" href="/scalenium/img/favicon64x64.png" /><link rel="icon" type="image/png" sizes="70x70" href="/scalenium/img/favicon70x70.png" /><link rel="icon" type="image/png" sizes="72x72" href="/scalenium/img/favicon72x72.png" /><link rel="icon" type="image/png" sizes="76x76" href="/scalenium/img/favicon76x76.png" /><link rel="icon" type="image/png" sizes="96x96" href="/scalenium/img/favicon96x96.png" /><link rel="icon" type="image/png" sizes="114x114" href="/scalenium/img/favicon114x114.png" /><link rel="icon" type="image/png" sizes="120x120" href="/scalenium/img/favicon120x120.png" /><link rel="icon" type="image/png" sizes="128x128" href="/scalenium/img/favicon128x128.png" /><link rel="icon" type="image/png" sizes="144x144" href="/scalenium/img/favicon144x144.png" /><link rel="icon" type="image/png" sizes="150x150" href="/scalenium/img/favicon150x150.png" /><link rel="icon" type="image/png" sizes="152x152" href="/scalenium/img/favicon152x152.png" /><link rel="icon" type="image/png" sizes="196x196" href="/scalenium/img/favicon196x196.png" /><link rel="icon" type="image/png" sizes="310x310" href="/scalenium/img/favicon310x310.png" /><link rel="icon" type="image/png" sizes="310x150" href="/scalenium/img/favicon310x150.png" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" /><link rel="stylesheet" href="/scalenium/highlight/styles/vs.css" /><link rel="stylesheet" href="/scalenium/css/pattern-style.css" /><link rel="stylesheet" href="/scalenium/css/override.css" /></head><body class="docs"><div id="wrapper"><div id="sidebar-wrapper"><ul id="sidebar" class="sidebar-nav"><li class="sidebar-brand"><a href="/scalenium/" class="brand"><div class="brand-wrapper"><span>Scalenium</span></div></a></li> <li><a href="/scalenium/docs/index.html" class="">Introduction</a></li> <li><a href="/scalenium/docs/examples.html" class="">Examples</a> <ul class="sub-section"> <li><a href="/scalenium/docs/examples/fifa.html" class=" active ">Football teams</a></li></ul></li></ul></div><div id="page-content-wrapper"><div class="nav"><div class="container-fluid"><div class="row"><div class="col-lg-12"><div class="action-menu pull-left clearfix"><a href="#menu-toggle" id="menu-toggle"><i class="fa fa-bars" aria-hidden="true"></i></a></div><ul class="pull-right"><li id="gh-eyes-item" class="hidden-xs"><a href="https://github.com/artemkorsakov/scalenium" target="_blank" rel="noopener noreferrer"><i class="fa fa-eye"></i><span>Watchers<span id="eyes" class="label label-default">--</span></span></a></li><li id="gh-stars-item" class="hidden-xs"><a href="https://github.com/artemkorsakov/scalenium" target="_blank" rel="noopener noreferrer"><i class="fa fa-star-o"></i><span>Stars<span id="stars" class="label label-default">--</span></span></a></li><li><a href="#" onclick="shareSiteTwitter('Scalenium Selenium on Scala examples.');"><i class="fa fa-twitter"></i></a></li><li><a href="#" onclick="shareSiteFacebook('Scalenium Selenium on Scala examples.');"><i class="fa fa-facebook"></i></a></li><li><a href="#" onclick="shareSiteGoogle();"><i class="fa fa-google-plus"></i></a></li></ul></div></div></div></div><div id="content" data-github-owner="artemkorsakov" data-github-repo="scalenium"><div class="content-wrapper"><section>
+<h2>Football teams</h2>
+
+
+<h3 id="task">Task:</h3>
+<p>Сколько человек в каждой футбольной сборной имеют более одного гражданства?</p>
+
+<p>За основу возьмем данные с сайта <a href="https://www.transfermarkt.com/">transfermarkt.com</a>:</p>
+<ul>
+  <li><a href="https://www.transfermarkt.com/statistik/weltrangliste/statistik">рейтинг сборных</a></li>
+  <li><a href="https://www.transfermarkt.com/belgien/startseite/verein/3382">страница сборной страны</a></li>
+  <li><a href="https://www.transfermarkt.com/dedryck-boyata/profil/spieler/88262">страница игрока</a></li>
+  <li>На странице игрока есть поле <strong>Citizenship</strong>, которое предоставляет необходимую информацию</li>
+</ul>
+
+<h3 id="list-of-footballsoccer-teams">List of football/soccer teams</h3>
+
+<p>Переход на заданную страницу, если она реализует trait <code class="highlighter-rouge">org.scalatestplus.selenium.Page</code>, может осуществляться так:</p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nn">org.scalatestplus.selenium.Page</span>
+<span class="k">import</span> <span class="nn">org.scalatestplus.selenium.WebBrowser._</span>
+<span class="k">import</span> <span class="nn">org.openqa.selenium.WebDriver</span>
+
+<span class="k">implicit</span> <span class="k">def</span> <span class="nf">webDriver</span><span class="k">:</span> <span class="kt">WebDriver</span> <span class="o">=</span> <span class="o">???</span> <span class="cm">/* from container */</span>
+
+<span class="k">class</span> <span class="nc">RankingListPage</span><span class="o">(</span><span class="k">implicit</span> <span class="k">val</span> <span class="nv">webDriver</span><span class="k">:</span> <span class="kt">WebDriver</span><span class="o">)</span> <span class="k">extends</span> <span class="nc">Page</span> <span class="o">{</span>
+   <span class="k">val</span> <span class="nv">url</span> <span class="k">=</span> <span class="s">"https://www.transfermarkt.com/statistik/weltrangliste/statistik"</span>
+<span class="o">}</span>
+
+<span class="k">val</span> <span class="nv">rankingListPage</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">RankingListPage</span><span class="o">()</span>
+<span class="n">go</span> <span class="n">to</span> <span class="n">rankingListPage</span>
+</code></pre></div></div>
+
+<p>После перехода прежде чем работать со страницей необходимо дождаться окончания отрисовки её элементов. 
+Будем ориентироваться на кнопку <strong>Compact</strong> и дождемся, когда она станет видима.</p>
+
+<p><img src="https://raw.githubusercontent.com/artemkorsakov/scalenium/master/docs/src/main/resources/microsite/img/examples/fifa/fifa_ranking_list.png" alt="Compact button" /></p>
+
+<p>Xpath локатор кнопки будет таким:</p>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nn">org.scalatestplus.selenium.WebBrowser._</span>
+
+<span class="k">val</span> <span class="nv">compactTab</span><span class="k">:</span> <span class="kt">Query</span> <span class="o">=</span> <span class="nf">xpath</span><span class="o">(</span><span class="s">"//div[.='Compact']"</span><span class="o">)</span>
+</code></pre></div></div>
+
+<p>Ожидание видимости элемента осуществляется так (<code class="highlighter-rouge">timeout</code> можно задать в конфиге, <code class="highlighter-rouge">query</code> - заданный элемент):</p>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nn">org.openqa.selenium._</span>
+<span class="k">import</span> <span class="nn">org.openqa.selenium.support.ui.WebDriverWait</span>
+<span class="k">import</span> <span class="nn">org.openqa.selenium.support.ui.ExpectedConditions</span>
+<span class="k">import</span> <span class="nn">org.scalatestplus.selenium.WebBrowser._</span>
+<span class="k">import</span> <span class="nn">java.time.Duration</span>
+
+<span class="k">def</span> <span class="nf">waitVisible</span><span class="o">(</span><span class="n">query</span><span class="k">:</span> <span class="kt">Query</span><span class="o">,</span> <span class="n">timeout</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)(</span><span class="k">implicit</span> <span class="n">webDriver</span><span class="k">:</span> <span class="kt">WebDriver</span><span class="o">)</span><span class="k">:</span> <span class="kt">WebElement</span> <span class="o">=</span>
+    <span class="k">new</span> <span class="nc">WebDriverWait</span><span class="o">(</span><span class="n">webDriver</span><span class="o">,</span> <span class="nv">Duration</span><span class="o">.</span><span class="py">ofSeconds</span><span class="o">(</span><span class="n">timeout</span><span class="o">)).</span><span class="py">until</span><span class="o">(</span><span class="nv">ExpectedConditions</span><span class="o">.</span><span class="py">visibilityOfElementLocated</span><span class="o">(</span><span class="nv">query</span><span class="o">.</span><span class="py">by</span><span class="o">))</span>
+</code></pre></div></div>
+
+<h4 id="рассмотрим-переход-на-закладку-compact">Рассмотрим переход на закладку <strong>Compact</strong>.</h4>
+
+<p>Переход на закладку будет состоять из следующих шагов:</p>
+<ul>
+  <li>Проверяем, активна ли закладка (активная закладка в данном случае в атрибуте <code class="highlighter-rouge">class</code> содержит “active”).</li>
+  <li>Если да, то ничего не делаем — переход осуществлен.</li>
+  <li>Если нет, то кликаем на закладку и ждём, когда закладка станет активна</li>
+</ul>
+
+<p>Проверить, что элемент <code class="highlighter-rouge">query: Query</code> содержит заданное значение в атрибуте <code class="highlighter-rouge">class</code> можно так:</p>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">doesClassContain</span><span class="o">(</span><span class="n">value</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Boolean</span> <span class="o">=</span>
+    <span class="o">(</span><span class="k">for</span> <span class="o">{</span>
+      <span class="n">element</span>   <span class="k">&lt;-</span> <span class="nf">find</span><span class="o">(</span><span class="n">query</span><span class="o">)</span>
+      <span class="n">attribute</span> <span class="k">&lt;-</span> <span class="nv">element</span><span class="o">.</span><span class="py">attribute</span><span class="o">(</span><span class="s">"class"</span><span class="o">)</span>
+    <span class="o">}</span> <span class="k">yield</span> <span class="nv">attribute</span><span class="o">.</span><span class="py">contains</span><span class="o">(</span><span class="n">value</span><span class="o">)).</span><span class="py">contains</span><span class="o">(</span><span class="kc">true</span><span class="o">)</span>
+</code></pre></div></div>
+
+<p>Кликнуть на элемент можно так: <code class="highlighter-rouge">clickOn(query)</code></p>
+
+<p>Ожидание, когда атрибут <code class="highlighter-rouge">class</code> элемента будет содержать заданное значение, можно реализовать так:</p>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">waitClassContain</span><span class="o">(</span><span class="n">value</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Boolean</span> <span class="o">=</span>
+  <span class="k">new</span> <span class="nc">WebDriverWait</span><span class="o">(</span><span class="n">driver</span><span class="o">,</span> <span class="nv">Duration</span><span class="o">.</span><span class="py">ofSeconds</span><span class="o">(</span><span class="n">timeout</span><span class="o">)).</span><span class="py">until</span><span class="o">(</span><span class="nv">ExpectedConditions</span><span class="o">.</span><span class="py">attributeContains</span><span class="o">(</span><span class="nv">query</span><span class="o">.</span><span class="py">by</span><span class="o">,</span> <span class="s">"class"</span><span class="o">,</span> <span class="n">value</span><span class="o">))</span>
+</code></pre></div></div>
+
+<p>Итого:</p>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">clickCompact</span><span class="o">()</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span>
+    <span class="nf">if</span> <span class="o">(!</span><span class="nv">compactTab</span><span class="o">.</span><span class="py">doesClassContain</span><span class="o">(</span><span class="s">"active"</span><span class="o">))</span> <span class="o">{</span>
+      <span class="nf">clickOn</span><span class="o">(</span><span class="n">compactTab</span><span class="o">)</span>
+      <span class="k">val</span> <span class="nv">_</span> <span class="k">=</span> <span class="nv">compactTab</span><span class="o">.</span><span class="py">waitClassContain</span><span class="o">(</span><span class="s">"active"</span><span class="o">)</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<p>Теперь, когда мы находимся на закладке <strong>Compact</strong> можно начать вычисление списка всех сборных. 
+Для этого нужно последовательно обойти все страницы рейтинга и с каждой считать список.</p>
+
+<p>Логика будет такой:</p>
+<ul>
+  <li>Проверяем, достигли ли последней страницы</li>
+  <li>Если нет, считываем список со страницы, переходим на следующую и возвращаемся на пункт выше</li>
+  <li>Если дошли до последней страницы, то считываем список с неё</li>
+</ul>
+
+<p><img src="https://raw.githubusercontent.com/artemkorsakov/scalenium/master/docs/src/main/resources/microsite/img/examples/fifa/next_button.png" alt="Next button" /></p>
+
+<p>Для того, чтобы проверить, достигли ли мы последней страницы, достаточно проверить, есть ли кнопка перехода 
+на следующую страницу (см. скрин выше, css локатор <code class="highlighter-rouge">li.naechste-seite &gt; a</code>):</p>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">val</span> <span class="nv">nextPageLink</span><span class="k">:</span> <span class="kt">Query</span> <span class="o">=</span> <span class="nf">cssSelector</span><span class="o">(</span><span class="s">"li.naechste-seite &gt; a"</span><span class="o">)</span>
+
+<span class="k">def</span> <span class="nf">isPresent</span><span class="k">:</span> <span class="kt">Boolean</span> <span class="o">=</span> <span class="nf">find</span><span class="o">(</span><span class="n">nextPageLink</span><span class="o">).</span><span class="py">isDefined</span>
+</code></pre></div></div>
+
+<p>Для того, чтобы считать список стран, необходимо найти все элементы с xpath локатором <code class="highlighter-rouge">//table/tbody//a[count(*)=0]</code>
+и у каждого элемента считать <strong>text</strong> и значение атрибута <strong>href</strong>
+(или <code class="highlighter-rouge">//table/tbody/tr[td[.='CONMEBOL']]//a[count(*)=0]</code> - если интересна только одна конфедерация, 
+например, самая маленькая - CONMEBOL(Южная Америка)):</p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">val</span> <span class="nv">itemLink</span><span class="k">:</span> <span class="kt">Query</span> <span class="o">=</span> <span class="nf">xpath</span><span class="o">(</span><span class="s">"//table/tbody//a[count(*)=0]"</span><span class="o">)</span>
+
+<span class="k">def</span> <span class="nf">items</span><span class="o">()</span><span class="k">:</span> <span class="kt">Seq</span><span class="o">[(</span><span class="kt">String</span>, <span class="kt">Option</span><span class="o">[</span><span class="kt">String</span><span class="o">])]</span> <span class="k">=</span>
+  <span class="nf">findAll</span><span class="o">(</span><span class="n">itemLink</span><span class="o">).</span><span class="py">map</span><span class="o">(</span><span class="n">el</span> <span class="k">=&gt;</span> <span class="o">(</span><span class="nv">el</span><span class="o">.</span><span class="py">text</span><span class="o">.</span><span class="py">trim</span><span class="o">,</span> <span class="nv">el</span><span class="o">.</span><span class="py">attribute</span><span class="o">(</span><span class="s">"href"</span><span class="o">))).</span><span class="py">toSeq</span>
+</code></pre></div></div>
+
+<p>Для перехода на следующую страницу мало кликнуть на кнопку <code class="highlighter-rouge">nextPageLink</code>, необходимо ещё дождаться, когда этот 
+переход произойдет.</p>
+
+<p>Чтобы удостовериться, что мы перешли на следующую страницу, мы можем считать номер текущей страницы 
+(css локатор <code class="highlighter-rouge">li.selected &gt; a</code>), а после клика на <code class="highlighter-rouge">nextPageLink</code> дождаться, когда номер текущей страницы станет на 1 больше:</p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">val</span> <span class="nv">selectedPageLink</span><span class="k">:</span> <span class="kt">Query</span> <span class="o">=</span> <span class="nf">cssSelector</span><span class="o">(</span><span class="s">"li.selected &gt; a"</span><span class="o">)</span>
+
+<span class="k">def</span> <span class="nf">clickNextPage</span><span class="o">()</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+  <span class="k">val</span> <span class="nv">nextPage</span> <span class="k">=</span> <span class="nf">find</span><span class="o">(</span><span class="n">selectedPageLink</span><span class="o">).</span><span class="py">map</span><span class="o">(</span><span class="nv">_</span><span class="o">.</span><span class="py">text</span><span class="o">).</span><span class="py">get</span><span class="o">().</span><span class="py">toInt</span> <span class="o">+</span> <span class="mi">1</span>
+  <span class="nf">clickOn</span><span class="o">(</span><span class="n">nextPageLink</span><span class="o">)</span>
+  <span class="k">val</span> <span class="nv">_</span> <span class="k">=</span> <span class="nf">webDriverWait</span><span class="o">(</span><span class="n">driver</span><span class="o">).</span><span class="py">until</span><span class="o">(</span><span class="nv">ExpectedConditions</span><span class="o">.</span><span class="py">textToBe</span><span class="o">(</span><span class="nv">selectedPageLink</span><span class="o">.</span><span class="py">by</span><span class="o">,</span> <span class="nv">nextPage</span><span class="o">.</span><span class="py">toString</span><span class="o">))</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Соединяем все воедино и получаем следующий список (на 13 марта 2021):</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Country name</th>
+      <th style="text-align: center">Url</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Belgium</td>
+      <td style="text-align: center"><a href="https://www.transfermarkt.com/belgien/startseite/verein/3382">link</a></td>
+    </tr>
+    <tr>
+      <td>France</td>
+      <td style="text-align: center"><a href="https://www.transfermarkt.com/frankreich/startseite/verein/3377">link</a></td>
+    </tr>
+    <tr>
+      <td>Brazil</td>
+      <td style="text-align: center"><a href="https://www.transfermarkt.com/brasilien/startseite/verein/3439">link</a></td>
+    </tr>
+    <tr>
+      <td>…</td>
+      <td style="text-align: center">…</td>
+    </tr>
+    <tr>
+      <td>B. Virgin</td>
+      <td style="text-align: center"><a href="https://www.transfermarkt.com/britische-jungferninseln/startseite/verein/17750">link</a></td>
+    </tr>
+    <tr>
+      <td>Anguilla</td>
+      <td style="text-align: center"><a href="https://www.transfermarkt.com/anguilla/startseite/verein/17748">link</a></td>
+    </tr>
+    <tr>
+      <td>San Marino</td>
+      <td style="text-align: center"><a href="https://www.transfermarkt.com/san-marino/startseite/verein/10521">link</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="team-player-list">Team player list</h3>
+
+<p>Теперь, когда у нас есть url страны можно составить список игроков сборной.</p>
+
+<p>Эта задача ещё более простая, потому что страница сборной страны содержит практически все те же необходимые нам элементы,
+что и страница рейтинга сборных. Изменения будут касаться только элемента <code class="highlighter-rouge">itemLink</code> (ссылка на игрока).</p>
+
+<p><img src="https://raw.githubusercontent.com/artemkorsakov/scalenium/master/docs/src/main/resources/microsite/img/examples/fifa/players_list.png" alt="Player list" /></p>
+
+<p>Ссылка на страницу игрока - это xpath локатор <code class="highlighter-rouge">//table/tbody//span[@class='hide-for-small']/a[count(*)=0]</code>:</p>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">val</span> <span class="nv">itemLink</span><span class="k">:</span> <span class="kt">Query</span> <span class="o">=</span> <span class="nf">xpath</span><span class="o">(</span><span class="s">"//table/tbody//span[@class='hide-for-small']/a[count(*)=0]"</span><span class="o">)</span>
+</code></pre></div></div>
+
+<h3 id="players-citizenship">Player’s citizenship</h3>
+
+<p>Осталось только определить гражданство игрока сборной, пользуясь его страницей, найденной на предыдущем этапе.</p>
+
+<p>Для начала нужно перейти на закладку <strong>Profile</strong>.</p>
+
+<p><img src="https://raw.githubusercontent.com/artemkorsakov/scalenium/master/docs/src/main/resources/microsite/img/examples/fifa/cityzenship.png" alt="Player list" /></p>
+
+<p>Мы уже переходили на закладку на предыдущих страницах.
+Здесь будет то же самое, за исключением одного нюанса: если раньше у активной закладки менялся атрибут  <code class="highlighter-rouge">class</code>,
+то теперь этот атрибут меняется не у самой ссылки, а у её родителя. Кстати, в этот раз немецкие разработчики сайта
+значение атрибута <code class="highlighter-rouge">class</code> активного элемента не стали переводить на английский, а оставили на немецком - “aktiv”:</p>
+
+<p><img src="https://raw.githubusercontent.com/artemkorsakov/scalenium/master/docs/src/main/resources/microsite/img/examples/fifa/aktiv.png" alt="Aktiv" /></p>
+
+<p>Создадим два элемента: ссылку и её родителя, а затем определим переход на закладку так:</p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">val</span> <span class="nv">profileTab</span><span class="k">:</span> <span class="kt">Query</span>  <span class="o">=</span> <span class="nf">xpath</span><span class="o">(</span><span class="s">"//li[@id='profile']"</span><span class="o">)</span>
+<span class="k">val</span> <span class="nv">profileLink</span><span class="k">:</span> <span class="kt">Query</span> <span class="o">=</span> <span class="nf">xpath</span><span class="o">(</span><span class="s">"//li[@id='profile']/a"</span><span class="o">)</span>
+
+<span class="k">def</span> <span class="nf">clickProfile</span><span class="o">()</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> 
+  <span class="nf">if</span> <span class="o">(!</span><span class="nv">profileTab</span><span class="o">.</span><span class="py">doesClassContain</span><span class="o">(</span><span class="s">"aktiv"</span><span class="o">))</span> <span class="o">{</span>
+    <span class="nf">clickOn</span><span class="o">(</span><span class="n">profileLink</span><span class="o">)</span>
+    <span class="k">val</span> <span class="nv">_</span> <span class="k">=</span> <span class="nv">profileTab</span><span class="o">.</span><span class="py">waitClassContain</span><span class="o">(</span><span class="s">"aktiv"</span><span class="o">)</span>
+  <span class="o">}</span>
+</code></pre></div></div>
+
+<p>Теперь осталось только определить гражданство. Для этого возьмем элемент <code class="highlighter-rouge">img</code> из строки <strong>Citizenship:</strong> 
+и считаем её атрибут “title”:</p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">val</span> <span class="nv">citizenshipImg</span><span class="k">:</span> <span class="kt">Query</span> <span class="o">=</span> <span class="nf">xpath</span><span class="o">(</span><span class="s">"//th[.='Citizenship:']/following-sibling::td/img"</span><span class="o">)</span>
+
+<span class="k">def</span> <span class="nf">citizenship</span><span class="o">()</span><span class="k">:</span> <span class="kt">Seq</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span> <span class="k">=</span> <span class="nf">findAll</span><span class="o">(</span><span class="n">citizenshipImg</span><span class="o">).</span><span class="py">flatMap</span><span class="o">(</span><span class="nv">_</span><span class="o">.</span><span class="py">attribute</span><span class="o">(</span><span class="s">"title"</span><span class="o">)).</span><span class="py">toSeq</span>
+</code></pre></div></div>
+
+<p>Вот и все, все страницы заполнены, осталось только написать автотест и тогда получим следующий результат.</p>
+
+<h3 id="results-for-russia-ukraine-and-belarus">Results (for Russia, Ukraine and Belarus)</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Country name</th>
+      <th style="text-align: center">%</th>
+      <th style="text-align: center">Foreigners</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Russia</td>
+      <td style="text-align: center">11% (3/28)</td>
+      <td style="text-align: center">(Brazil (1) -&gt; (Mário Fernandes), Kyrgyzstan (1) -&gt; (Ilzat Akhmetov), Germany (1) -&gt; (Roman Neustädter))</td>
+    </tr>
+    <tr>
+      <td>Ukraine</td>
+      <td style="text-align: center">9% (3/33)</td>
+      <td style="text-align: center">(Brazil (2) -&gt; (Marlos, Júnior Moraes), Hungary (1) -&gt; (Igor Kharatin))</td>
+    </tr>
+    <tr>
+      <td>Belarus</td>
+      <td style="text-align: center">4% (1/25)</td>
+      <td style="text-align: center">(Cameroon (1) -&gt; (Maks Ebong))</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><br />В наших сборных только 3 натурализированных игрока (и все из Бразилии). Остальные родились в СССР.</p>
+
+<h3 id="results-for-conmebol">Results (for CONMEBOL)</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Country name</th>
+      <th style="text-align: center">%</th>
+      <th style="text-align: center">Foreigners</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Brazil</td>
+      <td style="text-align: center">36% (9/25)</td>
+      <td style="text-align: center">List(Spain (3) -&gt; (Casemiro, Bruno Guimarães, Vinícius Júnior), Italy (1) -&gt; (Alex Telles), France (1) -&gt; (Thiago Silva), Portugal (4) -&gt; (Ederson, Marquinhos, Allan, Lucas Paquetá))</td>
+    </tr>
+    <tr>
+      <td>Argentina</td>
+      <td style="text-align: center">57% (13/23)</td>
+      <td style="text-align: center">(Spain (2) -&gt; (Gonzalo Montiel, Lionel Messi), Italy (11) -&gt; (Lucas Martínez Quarta, Wálter Kannemann, Nicolás Tagliafico, Guido Rodríguez, Rodrigo de Paul, Giovani Lo Celso, Nicolás Domínguez, Ángel Di María, Joaquín Correa, Papu Gómez, Lucas Alario))</td>
+    </tr>
+    <tr>
+      <td>Uruguay</td>
+      <td style="text-align: center">51,5% (18/35)</td>
+      <td style="text-align: center">(Spain (7) -&gt; (José María Giménez, Sebastián Coates, Diego Godín, Agustín Oliveros, Damián Suárez, Lucas Torreira, Federico Valverde), Paraguay (1) -&gt; (Rodrigo Muñoz), Italy (10) -&gt; (Fernando Muslera, Martín Campaña, Sergio Rochet, Matías Viña, Franco Pizzichillo, Nahitan Nández, Matías Vecino, Giorgian de Arrascaeta, Diego Rossi, Cristhian Stuani))</td>
+    </tr>
+    <tr>
+      <td>Colombia</td>
+      <td style="text-align: center">22% (6/27)</td>
+      <td style="text-align: center">(Spain (4) -&gt; (Jeison Murillo, Johan Mojica, James Rodríguez, Luis Suárez), Argentina (1) -&gt; (Frank Fabra), England (1) -&gt; (Steven Alzate))</td>
+    </tr>
+    <tr>
+      <td>Chile</td>
+      <td style="text-align: center">21% (5/24)</td>
+      <td style="text-align: center">(Haiti (1) -&gt; (Jean Beausejour), Spain (3) -&gt; (Claudio Bravo, Gary Medel, Fabián Orellana), Italy (1) -&gt; (Luis Jiménez))</td>
+    </tr>
+    <tr>
+      <td>Peru</td>
+      <td style="text-align: center">33% (12/36)</td>
+      <td style="text-align: center">(Venezuela (1) -&gt; (Carlos Ascues), Spain (3) -&gt; (Alexander Callens, Cristian Benavente, Sergio Peña), Uruguay (1) -&gt; (Gabriel Costa), Italy (2) -&gt; (Luis Abram, Gianluca Lapadula), Netherlands (1) -&gt; (Renato Tapia), Switzerland (1) -&gt; (Jean-Pierre Rhyner), Portugal (1) -&gt; (André Carrillo), Croatia (1) -&gt; (Raúl Ruidíaz), Lebanon (1) -&gt; (Matías Succar))</td>
+    </tr>
+    <tr>
+      <td>Venezuela</td>
+      <td style="text-align: center">25% (7/28)</td>
+      <td style="text-align: center">(Spain (4) -&gt; (Roberto Rosales, Juanpi Añor, Darwin Machís, Fernando Aristeguieta), Switzerland (1) -&gt; (Rolf Feltscher), England (1) -&gt; (Luis Del Pino Mago), Colombia (1) -&gt; (Jan Hurtado))</td>
+    </tr>
+    <tr>
+      <td>Paraguay</td>
+      <td style="text-align: center">21% (7/33)</td>
+      <td style="text-align: center">(Spain (1) -&gt; (Antonio Sanabria), Argentina (4) -&gt; (Santiago Arzamendia, Gastón Giménez, Andrés Cubas, Raúl Bobadilla), Italy (2) -&gt; (Antony Silva, Iván Piris))</td>
+    </tr>
+    <tr>
+      <td>Ecuador</td>
+      <td style="text-align: center">12% (4/33)</td>
+      <td style="text-align: center">(Spain (3) -&gt; (Erick Ferigra, Pervis Estupiñán, Leonardo Campana), Argentina (1) -&gt; (Hernán Galíndez))</td>
+    </tr>
+    <tr>
+      <td>Bolivia</td>
+      <td style="text-align: center">25% (7/28)</td>
+      <td style="text-align: center">(United States (2) -&gt; (Adrián Jusino, Antonio Bustamante), Spain (1) -&gt; (Jaume Cuéllar), Argentina (1) -&gt; (Carlos Lampe), Brazil (1) -&gt; (Marcelo Moreno), Switzerland (1) -&gt; (Boris Cespedes), Portugal (1) -&gt; (Erwin Sánchez))</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><br />А вот в Южной Америке людей с двойным гражданством довольно много.
+Впрочем, это неудивительно: в чемпионатах ЕС жесткий лимит на легионеров (в заявке только 3 игрока с гражданством не ЕС),
+поэтому южноамериканцам, чтобы попасть в Европу, приходится либо пытаться получить гражданство бывшей митрополии 
+(Бразилия -&gt; Португалия, остальные -&gt; Испания), либо искать среди своих предков итальянцев.
+Второе не так сложно, как кажется. Во время Второй Мировой войны Южная Америка хоть и была на бумаге нейтральной, 
+по факту разделилась на два лагеря: Бразилия -&gt; союзники, Аргентина + Уругвай -&gt; фашисты.
+Поэтому неудивительно, что после 1945 года многие итальянцы в поисках лучшей жизни иммигрировали 
+из разрушенной фашисткой Италии в симпатизировавшим ей Аргентине и Уругваю.
+Поэтому современному аргентинцу или уругвайцу получить гражданство Италии не сложнее, чем человеку по фамилии 
+Зильберман - гражданство Израиля - кто-нибудь среди предков нужной национальности да найдётся!</p>
+
+<h3 id="pages">Pages</h3>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nn">com.github.artemkorsakov.query.UpQuery._</span>
+<span class="k">import</span> <span class="nn">org.openqa.selenium.WebDriver</span>
+<span class="k">import</span> <span class="nn">org.scalatestplus.selenium.WebBrowser._</span>
+
+<span class="k">abstract</span> <span class="k">class</span> <span class="nc">ListPage</span><span class="o">(</span><span class="k">implicit</span> <span class="k">val</span> <span class="nv">webDriver</span><span class="k">:</span> <span class="kt">WebDriver</span><span class="o">)</span> <span class="o">{</span>
+  <span class="k">val</span> <span class="nv">compactTab</span><span class="k">:</span> <span class="kt">Query</span> <span class="o">=</span> <span class="nf">xpath</span><span class="o">(</span><span class="s">"//div[.='Compact']"</span><span class="o">)</span>
+  <span class="k">val</span> <span class="nv">itemLink</span><span class="k">:</span> <span class="kt">Query</span>
+
+  <span class="k">def</span> <span class="nf">clickCompact</span><span class="o">()</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span>
+    <span class="nf">if</span> <span class="o">(!</span><span class="nv">compactTab</span><span class="o">.</span><span class="py">doesClassContain</span><span class="o">(</span><span class="s">"active"</span><span class="o">))</span> <span class="o">{</span>
+      <span class="nf">clickOn</span><span class="o">(</span><span class="n">compactTab</span><span class="o">)</span>
+      <span class="k">val</span> <span class="nv">_</span> <span class="k">=</span> <span class="nv">compactTab</span><span class="o">.</span><span class="py">waitClassContain</span><span class="o">(</span><span class="s">"active"</span><span class="o">)</span>
+    <span class="o">}</span>
+
+  <span class="k">def</span> <span class="nf">items</span><span class="o">()</span><span class="k">:</span> <span class="kt">Seq</span><span class="o">[(</span><span class="kt">String</span>, <span class="kt">Option</span><span class="o">[</span><span class="kt">String</span><span class="o">])]</span> <span class="k">=</span>
+    <span class="nf">findAll</span><span class="o">(</span><span class="n">itemLink</span><span class="o">).</span><span class="py">map</span><span class="o">(</span><span class="n">el</span> <span class="k">=&gt;</span> <span class="o">(</span><span class="nv">el</span><span class="o">.</span><span class="py">text</span><span class="o">.</span><span class="py">trim</span><span class="o">,</span> <span class="nv">el</span><span class="o">.</span><span class="py">attribute</span><span class="o">(</span><span class="s">"href"</span><span class="o">))).</span><span class="py">toSeq</span>
+
+  <span class="k">def</span> <span class="nf">waitLoad</span><span class="o">()</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="k">val</span> <span class="nv">_</span> <span class="k">=</span> <span class="nv">compactTab</span><span class="o">.</span><span class="py">waitVisible</span><span class="o">()</span>
+  <span class="o">}</span>
+
+<span class="o">}</span>
+
+<span class="k">import</span> <span class="nn">com.github.artemkorsakov.query.Waiter</span>
+<span class="k">import</span> <span class="nn">org.scalatestplus.selenium.Page</span>
+
+<span class="k">case</span> <span class="k">class</span> <span class="nc">CountryPage</span><span class="o">(</span><span class="n">url</span><span class="k">:</span> <span class="kt">String</span><span class="o">)(</span><span class="k">implicit</span> <span class="k">override</span> <span class="k">val</span> <span class="nv">webDriver</span><span class="k">:</span> <span class="kt">WebDriver</span><span class="o">)</span> <span class="k">extends</span> <span class="nc">ListPage</span> <span class="k">with</span> <span class="nc">Page</span> <span class="k">with</span> <span class="nc">Waiter</span> <span class="o">{</span>
+  <span class="k">val</span> <span class="nv">itemLink</span><span class="k">:</span> <span class="kt">Query</span> <span class="o">=</span> <span class="nf">xpath</span><span class="o">(</span><span class="s">"//table/tbody//span[@class='hide-for-small']/a[count(*)=0]"</span><span class="o">)</span>
+
+<span class="o">}</span>
+
+<span class="k">import</span> <span class="nn">org.openqa.selenium.support.ui.ExpectedConditions</span>
+
+<span class="k">class</span> <span class="nc">RankingListPage</span><span class="o">(</span><span class="k">implicit</span> <span class="k">override</span> <span class="k">val</span> <span class="nv">webDriver</span><span class="k">:</span> <span class="kt">WebDriver</span><span class="o">)</span> <span class="k">extends</span> <span class="nc">ListPage</span> <span class="k">with</span> <span class="nc">Page</span> <span class="k">with</span> <span class="nc">Waiter</span> <span class="o">{</span>
+  <span class="k">val</span> <span class="nv">url</span>                     <span class="k">=</span> <span class="s">"https://www.transfermarkt.com/statistik/weltrangliste/statistik"</span>
+  <span class="k">val</span> <span class="nv">itemLink</span><span class="k">:</span> <span class="kt">Query</span>         <span class="o">=</span> <span class="nf">xpath</span><span class="o">(</span><span class="s">"//table/tbody/tr[td[.='CONMEBOL']]//a[count(*)=0]"</span><span class="o">)</span>
+  <span class="k">val</span> <span class="nv">nextPageLink</span><span class="k">:</span> <span class="kt">Query</span>     <span class="o">=</span> <span class="nf">cssSelector</span><span class="o">(</span><span class="s">"li.naechste-seite &gt; a"</span><span class="o">)</span>
+  <span class="k">val</span> <span class="nv">selectedPageLink</span><span class="k">:</span> <span class="kt">Query</span> <span class="o">=</span> <span class="nf">cssSelector</span><span class="o">(</span><span class="s">"li.selected &gt; a"</span><span class="o">)</span>
+
+  <span class="k">def</span> <span class="nf">clickNextPage</span><span class="o">()</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="k">val</span> <span class="nv">nextPage</span> <span class="k">=</span> <span class="nv">selectedPageLink</span><span class="o">.</span><span class="py">normalizeSpaceText</span><span class="o">.</span><span class="py">toInt</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="nf">clickOn</span><span class="o">(</span><span class="n">nextPageLink</span><span class="o">)</span>
+    <span class="k">val</span> <span class="nv">_</span> <span class="k">=</span> <span class="nf">webDriverWait</span><span class="o">(</span><span class="n">webDriver</span><span class="o">).</span><span class="py">until</span><span class="o">(</span><span class="nv">ExpectedConditions</span><span class="o">.</span><span class="py">textToBe</span><span class="o">(</span><span class="nv">selectedPageLink</span><span class="o">.</span><span class="py">by</span><span class="o">,</span> <span class="nv">nextPage</span><span class="o">.</span><span class="py">toString</span><span class="o">))</span>
+  <span class="o">}</span>
+
+<span class="o">}</span>
+
+<span class="k">case</span> <span class="k">class</span> <span class="nc">PlayerPage</span><span class="o">(</span><span class="n">url</span><span class="k">:</span> <span class="kt">String</span><span class="o">)(</span><span class="k">implicit</span> <span class="k">val</span> <span class="nv">webDriver</span><span class="k">:</span> <span class="kt">WebDriver</span><span class="o">)</span> <span class="k">extends</span> <span class="nc">Page</span> <span class="k">with</span> <span class="nc">Waiter</span> <span class="o">{</span>
+  <span class="k">val</span> <span class="nv">profileTab</span><span class="k">:</span> <span class="kt">Query</span>     <span class="o">=</span> <span class="nf">xpath</span><span class="o">(</span><span class="s">"//li[@id='profile']"</span><span class="o">)</span>
+  <span class="k">val</span> <span class="nv">profileLink</span><span class="k">:</span> <span class="kt">Query</span>    <span class="o">=</span> <span class="nf">xpath</span><span class="o">(</span><span class="n">s</span><span class="s">"${profileTab.queryString}/a"</span><span class="o">)</span>
+  <span class="k">val</span> <span class="nv">citizenshipImg</span><span class="k">:</span> <span class="kt">Query</span> <span class="o">=</span> <span class="nf">xpath</span><span class="o">(</span><span class="s">"//th[.='Citizenship:']/following-sibling::td/img"</span><span class="o">)</span>
+
+  <span class="k">def</span> <span class="nf">clickProfile</span><span class="o">()</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span>
+    <span class="nf">if</span> <span class="o">(!</span><span class="nv">profileTab</span><span class="o">.</span><span class="py">doesClassContain</span><span class="o">(</span><span class="s">"aktiv"</span><span class="o">))</span> <span class="o">{</span>
+      <span class="nf">clickOn</span><span class="o">(</span><span class="n">profileLink</span><span class="o">)</span>
+      <span class="k">val</span> <span class="nv">_</span> <span class="k">=</span> <span class="nv">profileTab</span><span class="o">.</span><span class="py">waitClassContain</span><span class="o">(</span><span class="s">"aktiv"</span><span class="o">)</span>
+    <span class="o">}</span>
+
+  <span class="k">def</span> <span class="nf">citizenship</span><span class="o">()</span><span class="k">:</span> <span class="kt">Seq</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span> <span class="k">=</span>
+    <span class="nf">findAll</span><span class="o">(</span><span class="n">citizenshipImg</span><span class="o">).</span><span class="py">flatMap</span><span class="o">(</span><span class="nv">_</span><span class="o">.</span><span class="py">attribute</span><span class="o">(</span><span class="s">"title"</span><span class="o">)).</span><span class="py">toSeq</span>
+
+<span class="o">}</span>
+
+<span class="k">import</span> <span class="nn">com.github.artemkorsakov.containers.SeleniumContainerSuite</span>
+<span class="k">import</span> <span class="nn">com.github.artemkorsakov.query.UpQuery._</span>
+<span class="k">import</span> <span class="nn">org.scalatest.flatspec.AnyFlatSpec</span>
+<span class="k">import</span> <span class="nn">org.scalatest.matchers.should.Matchers</span>
+<span class="k">import</span> <span class="nn">scala.collection.mutable.ArrayBuffer</span>
+
+<span class="k">class</span> <span class="nc">FootballTeams</span> <span class="k">extends</span> <span class="nc">AnyFlatSpec</span> <span class="k">with</span> <span class="nc">SeleniumContainerSuite</span> <span class="k">with</span> <span class="nc">Matchers</span> <span class="o">{</span>
+
+  <span class="s">"FootballTeams"</span> <span class="n">should</span> <span class="s">"make a url list of national teams"</span> <span class="n">in</span> <span class="o">{</span>
+    <span class="k">val</span> <span class="nv">urls</span> <span class="k">=</span> <span class="n">calculateCountriesUrls</span>
+    <span class="nv">log</span><span class="o">.</span><span class="py">info</span><span class="o">(</span><span class="n">s</span><span class="s">"Countries length - ${urls.length}"</span><span class="o">)</span>
+    <span class="nv">urls</span><span class="o">.</span><span class="py">length</span> <span class="n">should</span> <span class="n">be</span> <span class="o">&gt;</span> <span class="mi">0</span>
+  <span class="o">}</span>
+
+  <span class="n">it</span> <span class="n">should</span> <span class="s">"make a team player list"</span> <span class="n">in</span> <span class="o">{</span>
+    <span class="k">val</span> <span class="nv">url</span> <span class="k">=</span> <span class="s">"https://www.transfermarkt.com/belgien/startseite/verein/3382"</span>
+    <span class="k">val</span> <span class="nv">urls</span> <span class="k">=</span> <span class="nf">calculatePlayersUrls</span><span class="o">(</span><span class="n">url</span><span class="o">)</span>
+    <span class="nv">log</span><span class="o">.</span><span class="py">info</span><span class="o">(</span><span class="n">s</span><span class="s">"Players length - ${urls.length}"</span><span class="o">)</span>
+    <span class="nv">urls</span><span class="o">.</span><span class="py">length</span> <span class="n">should</span> <span class="n">be</span> <span class="o">&gt;</span> <span class="mi">20</span>
+  <span class="o">}</span>
+
+  <span class="n">it</span> <span class="n">should</span> <span class="s">"get citizenship from the player's page"</span> <span class="n">in</span> <span class="o">{</span>
+    <span class="k">val</span> <span class="nv">url</span> <span class="k">=</span> <span class="s">"https://www.transfermarkt.com/christian-benteke/profil/spieler/50201"</span>
+    <span class="k">val</span> <span class="nv">citizenship</span> <span class="k">=</span> <span class="nf">calculateCitizenship</span><span class="o">(</span><span class="n">url</span><span class="o">)</span>
+    <span class="nv">log</span><span class="o">.</span><span class="py">info</span><span class="o">(</span><span class="n">s</span><span class="s">"citizenship - $citizenship"</span><span class="o">)</span>
+    <span class="nv">citizenship</span><span class="o">.</span><span class="py">should</span><span class="o">(</span><span class="nf">contain</span><span class="o">(</span><span class="s">"Belgium"</span><span class="o">))</span>
+  <span class="o">}</span>
+
+  <span class="k">private</span> <span class="k">def</span> <span class="nf">calculateCountriesUrls</span><span class="k">:</span> <span class="kt">ArrayBuffer</span><span class="o">[(</span><span class="kt">String</span>, <span class="kt">Option</span><span class="o">[</span><span class="kt">String</span><span class="o">])]</span> <span class="k">=</span> <span class="o">{</span>
+    <span class="k">val</span> <span class="nv">rankingListPage</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">RankingListPage</span><span class="o">()</span>
+    <span class="n">go</span> <span class="n">to</span> <span class="n">rankingListPage</span>
+    <span class="nv">rankingListPage</span><span class="o">.</span><span class="py">waitLoad</span><span class="o">()</span>
+    <span class="nv">rankingListPage</span><span class="o">.</span><span class="py">clickCompact</span><span class="o">()</span>
+    <span class="k">val</span> <span class="nv">countriesUrls</span> <span class="k">=</span> <span class="nv">scala</span><span class="o">.</span><span class="py">collection</span><span class="o">.</span><span class="py">mutable</span><span class="o">.</span><span class="py">ArrayBuffer</span><span class="o">.</span><span class="py">empty</span><span class="o">[(</span><span class="kt">String</span>, <span class="kt">Option</span><span class="o">[</span><span class="kt">String</span><span class="o">])]</span>
+    <span class="nf">while</span> <span class="o">(</span><span class="nv">rankingListPage</span><span class="o">.</span><span class="py">nextPageLink</span><span class="o">.</span><span class="py">isPresent</span><span class="o">)</span> <span class="o">{</span>
+      <span class="nv">log</span><span class="o">.</span><span class="py">info</span><span class="o">(</span><span class="n">s</span><span class="s">"Ranking page ${rankingListPage.selectedPageLink.normalizeSpaceText}"</span><span class="o">)</span>
+      <span class="n">countriesUrls</span> <span class="o">++=</span> <span class="nv">rankingListPage</span><span class="o">.</span><span class="py">items</span><span class="o">().</span><span class="py">toBuffer</span>
+      <span class="nv">rankingListPage</span><span class="o">.</span><span class="py">clickNextPage</span><span class="o">()</span>
+    <span class="o">}</span>
+    <span class="nv">log</span><span class="o">.</span><span class="py">info</span><span class="o">(</span><span class="n">s</span><span class="s">"Ranking page ${rankingListPage.selectedPageLink.normalizeSpaceText}"</span><span class="o">)</span>
+    <span class="n">countriesUrls</span> <span class="o">++=</span> <span class="nv">rankingListPage</span><span class="o">.</span><span class="py">items</span><span class="o">().</span><span class="py">toBuffer</span>
+  <span class="o">}</span>
+
+  <span class="k">private</span> <span class="k">def</span> <span class="nf">calculatePlayersUrls</span><span class="o">(</span><span class="n">countryUrl</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Seq</span><span class="o">[(</span><span class="kt">String</span>, <span class="kt">Option</span><span class="o">[</span><span class="kt">String</span><span class="o">])]</span> <span class="k">=</span> <span class="o">{</span>
+    <span class="k">val</span> <span class="nv">countryPage</span> <span class="k">=</span> <span class="nc">CountryPage</span><span class="o">(</span><span class="n">countryUrl</span><span class="o">)</span>
+    <span class="n">go</span> <span class="n">to</span> <span class="n">countryPage</span>
+    <span class="nv">countryPage</span><span class="o">.</span><span class="py">waitLoad</span><span class="o">()</span>
+    <span class="nv">countryPage</span><span class="o">.</span><span class="py">clickCompact</span><span class="o">()</span>
+    <span class="nv">countryPage</span><span class="o">.</span><span class="py">items</span><span class="o">()</span>
+  <span class="o">}</span>
+
+  <span class="k">private</span> <span class="k">def</span> <span class="nf">calculateCitizenship</span><span class="o">(</span><span class="n">playerUrl</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Seq</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
+    <span class="k">val</span> <span class="nv">playerPage</span> <span class="k">=</span> <span class="nc">PlayerPage</span><span class="o">(</span><span class="n">playerUrl</span><span class="o">)</span>
+    <span class="n">go</span> <span class="n">to</span> <span class="n">playerPage</span>
+    <span class="nv">playerPage</span><span class="o">.</span><span class="py">clickProfile</span><span class="o">()</span>
+    <span class="nv">playerPage</span><span class="o">.</span><span class="py">citizenship</span><span class="o">()</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+
+<h3>Source code</h3>
+
+<div class="edit-button">
+    <a href="https://github.com/artemkorsakov/scalenium/tree/master/tests/src/test/scala/com/github/artemkorsakov/tests/examples/FootballTeams.scala"
+       target="_blank" class="btn-sm btn-info">
+        Source code
+    </a>
+</div>
+</section><div class="edit-button"><a href="https://github.com/artemkorsakov/scalenium/edit/master/docs/docs/docs/examples/fifa.md" target="_blank" rel="noopener noreferrer" class="btn-sm btn-info">Improve this Page</a></div></div></div></div></div><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script><script src="/scalenium/highlight/highlight.pack.js"></script><script>
+// For all code blocks, copy the language from the containing div
+// to the inner code tag (where hljs expects it to be)
+const langPrefix = 'language-';
+document.querySelectorAll(`div[class^='${langPrefix}']`).forEach(function(div) {
+  div.classList.forEach(function(cssClass) {
+    if (cssClass.startsWith(langPrefix)) {
+      const lang = cssClass.substring(langPrefix.length);
+      div.querySelectorAll('pre code').forEach(function(code) {
+        code.classList.add(lang);
+      });
+    }
+  });
+});
+
+hljs.configure({languages:['scala','java','bash']});
+hljs.initHighlightingOnLoad();
+      </script><script>console.info('\x57\x65\x62\x73\x69\x74\x65\x20\x62\x75\x69\x6c\x74\x20\x77\x69\x74\x68\x3a\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x5f\x5f\x20\x20\x20\x20\x5f\x5f\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x5f\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x5f\x20\x5f\x5f\x0a\x20\x20\x20\x5f\x5f\x5f\x5f\x5f\x2f\x20\x2f\x5f\x20\x20\x2f\x20\x2f\x5f\x20\x20\x20\x20\x20\x20\x5f\x5f\x5f\x5f\x20\x5f\x5f\x5f\x20\x20\x28\x5f\x29\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x5f\x20\x20\x5f\x5f\x5f\x5f\x5f\x28\x5f\x29\x20\x2f\x5f\x5f\x5f\x5f\x20\x20\x5f\x5f\x5f\x5f\x5f\x0a\x20\x20\x2f\x20\x5f\x5f\x5f\x2f\x20\x5f\x5f\x20\x5c\x2f\x20\x5f\x5f\x2f\x5f\x5f\x5f\x5f\x5f\x2f\x20\x5f\x5f\x20\x60\x5f\x5f\x20\x5c\x2f\x20\x2f\x20\x5f\x5f\x5f\x2f\x20\x5f\x5f\x5f\x2f\x20\x5f\x5f\x20\x5c\x2f\x20\x5f\x5f\x5f\x2f\x20\x2f\x20\x5f\x5f\x2f\x20\x5f\x20\x5c\x2f\x20\x5f\x5f\x5f\x2f\x0a\x20\x28\x5f\x5f\x20\x20\x29\x20\x2f\x5f\x2f\x20\x2f\x20\x2f\x5f\x2f\x5f\x5f\x5f\x5f\x5f\x2f\x20\x2f\x20\x2f\x20\x2f\x20\x2f\x20\x2f\x20\x2f\x20\x2f\x5f\x5f\x2f\x20\x2f\x20\x20\x2f\x20\x2f\x5f\x2f\x20\x28\x5f\x5f\x20\x20\x29\x20\x2f\x20\x2f\x5f\x2f\x20\x20\x5f\x5f\x28\x5f\x5f\x20\x20\x29\x0a\x2f\x5f\x5f\x5f\x5f\x2f\x5f\x2e\x5f\x5f\x5f\x2f\x5c\x5f\x5f\x2f\x20\x20\x20\x20\x20\x2f\x5f\x2f\x20\x2f\x5f\x2f\x20\x2f\x5f\x2f\x5f\x2f\x5c\x5f\x5f\x5f\x2f\x5f\x2f\x20\x20\x20\x5c\x5f\x5f\x5f\x5f\x2f\x5f\x5f\x5f\x5f\x2f\x5f\x2f\x5c\x5f\x5f\x2f\x5c\x5f\x5f\x5f\x2f\x5f\x5f\x5f\x5f\x2f\x0a\x0a\x68\x74\x74\x70\x73\x3a\x2f\x2f\x34\x37\x64\x65\x67\x2e\x67\x69\x74\x68\x75\x62\x2e\x69\x6f\x2f\x73\x62\x74\x2d\x6d\x69\x63\x72\x6f\x73\x69\x74\x65\x73')</script><script src="/scalenium/js/main.js"></script></body></html>
