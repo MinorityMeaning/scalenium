@@ -1,10 +1,10 @@
 package com.github.artemkorsakov.examples.fifa
 
+import com.github.artemkorsakov.query.UpQuery._
 import com.github.artemkorsakov.query.Waiter
 import org.openqa.selenium.WebDriver
 import org.scalatestplus.selenium.Page
 import org.scalatestplus.selenium.WebBrowser._
-import com.github.artemkorsakov.query.UpQuery._
 
 case class PlayerPage(url: String)(implicit val webDriver: WebDriver) extends Page with Waiter {
   val profileTab: Query     = xpath("//li[@id='profile']")

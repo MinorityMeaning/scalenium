@@ -1,38 +1,37 @@
-package com.github.artemkorsakov.tests.examples
+package com.github.artemkorsakov.examples.suites
 
 import com.github.artemkorsakov.containers.SeleniumContainerSuite
 import com.github.artemkorsakov.examples.fifa._
 import com.github.artemkorsakov.query.UpQuery._
-import com.github.artemkorsakov.spec.Tags
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import org.scalatestplus.selenium.WebBrowser._
 
 import scala.collection.mutable.ArrayBuffer
 
-class FootballTeams extends AnyFlatSpec with SeleniumContainerSuite with Matchers with Tags {
+class FootballTeams extends AnyFlatSpec with SeleniumContainerSuite with Matchers {
 
-  "FootballTeams" should "make a url list of national teams" taggedAs example in {
+  "FootballTeams" should "make a url list of national teams" in {
     val urls = calculateCountriesUrls
     log.info(s"Countries length - ${urls.length}")
     urls.length should be > 0
   }
 
-  it should "make a team player list" taggedAs example in {
+  it should "make a team player list" in {
     val url  = "https://www.transfermarkt.com/belgien/startseite/verein/3382"
     val urls = calculatePlayersUrls(url)
     log.info(s"Players length - ${urls.length}")
     urls.length should be > 20
   }
 
-  it should "get citizenship from the player's page" taggedAs example in {
+  it should "get citizenship from the player's page" in {
     val url         = "https://www.transfermarkt.com/christian-benteke/profil/spieler/50201"
     val citizenship = calculateCitizenship(url)
     log.info(s"citizenship - $citizenship")
     citizenship.should(contain("Belgium"))
   }
 
-  it should "put it all together" taggedAs example in {
+  it should "put it all together" in {
     val countriesUrls = calculateCountriesUrls
     log.info(s"Countries length - ${countriesUrls.length}")
 
@@ -43,7 +42,7 @@ class FootballTeams extends AnyFlatSpec with SeleniumContainerSuite with Matcher
     }
   }
 
-  it should "for Russia, Ukraine and Belarus" taggedAs example in {
+  it should "for Russia, Ukraine and Belarus" in {
     val countriesUrls = ArrayBuffer(
       ("Russia", Some("https://www.transfermarkt.com/russland/startseite/verein/3448")),
       ("Ukraine", Some("https://www.transfermarkt.com/ukraine/startseite/verein/3699")),
