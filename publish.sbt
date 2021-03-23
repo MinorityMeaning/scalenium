@@ -1,5 +1,6 @@
 import sbt.Credentials
 import sbt.Keys.credentials
+ThisBuild / organization := "com.github.artemkorsakov"
 ThisBuild / organizationName := "Artem Korsakov"
 ThisBuild / organizationHomepage := Some(url("https://github.com/artemkorsakov"))
 
@@ -35,7 +36,7 @@ ThisBuild / releaseProcess := Seq[ReleaseStep](
   checkSnapshotDependencies,
   inquireVersions,
   runClean,
-  runTest,
+  releaseStepCommandAndRemaining("+test"),
   setReleaseVersion,
   commitReleaseVersion,
   tagRelease,

@@ -15,7 +15,7 @@ object Dependencies {
     val Testcontainers = "0.39.3"
   }
 
-  val root = Def.setting(
+  val scalenium = Def.setting(
     Seq(
       "org.scalatestplus"          %% "selenium-3-141"                          % Version.Scalatestplus,
       "org.seleniumhq.selenium"     % "selenium-java"                           % Version.Selenium,
