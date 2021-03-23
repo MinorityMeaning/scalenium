@@ -4,15 +4,6 @@ ThisBuild / organization := "com.github.artemkorsakov"
 ThisBuild / organizationName := "Artem Korsakov"
 ThisBuild / organizationHomepage := Some(url("https://github.com/artemkorsakov"))
 
-ThisBuild / developers := List(
-  Developer(
-    id = "@artemkorsakov",
-    name = "Artem Korsakov",
-    email = "artemkorsakov@mail.ru",
-    url = url("http://github.com/artemkorsakov")
-  )
-)
-
 ThisBuild / description := "Selenium on Scala examples."
 
 ThisBuild / credentials += Credentials(

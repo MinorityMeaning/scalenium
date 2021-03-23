@@ -1,22 +1,22 @@
-import Dependencies.Version._
 import microsites._
 import sbtcatalysts.CatalystsKeys.docsMappingsAPIDir
+import sbtcrossproject.CrossPlugin.autoImport.CrossType
 
 addCommandAlias("com", "all compile test:compile")
 addCommandAlias("fmt", "all scalafmtSbt scalafmtAll")
 addCommandAlias("fmtCheck", "all scalafmtSbtCheck scalafmtCheckAll")
 addCommandAlias("stl", "all scalastyle test:scalastyle")
+addCommandAlias("gitSnapshots", ";set version in ThisBuild := git.gitDescribedVersion.value.get + \"-SNAPSHOT\"")
 
 val release_version = "0.1.0"
 val badge =
   "[![Maven Central](https://img.shields.io/maven-central/v/com.github.artemkorsakov/scalenium-core_2.13.svg?label=Maven%20Central&color=success)](https://search.maven.org/search?q=g:%22com.github.artemkorsakov%22%20AND%20a:%22scalenium-core_2.13%22)"
 
-val apache2 = "Apache-2.0" -> url("https://www.apache.org/licenses/LICENSE-2.0.html")
 val gh = GitHubSettings(
   org = "artemkorsakov",
   proj = "scalenium",
   publishOrg = "artemkorsakov",
-  license = apache2
+  license = apache
 )
 
 val github = "https://github.com/artemkorsakov"
@@ -28,35 +28,53 @@ val mainDev =
     new java.net.URL(github)
   )
 
-val devs = List(Developer)
+val devs = List(mainDev)
 
-lazy val scalenium = Project(id = "scalenium", base = file("core"))
-  .configs(IntegrationTest)
+val Scala212 = "2.12.13"
+val Scala213 = "2.13.5"
+val libs     = Dependencies.libs
+
+lazy val rootSettings = buildSettings ++ commonSettings ++ publishSettings ++ scoverageSettings
+lazy val module       = mkModuleFactory(gh.proj, mkConfig(rootSettings, commonJvmSettings, commonJsSettings))
+lazy val prj          = mkPrjFactory(rootSettings)
+
+lazy val rootPrj = project
+  .configure(mkRootConfig(rootSettings, rootJVM))
+  .aggregate(rootJVM, rootJS)
+  .dependsOn(rootJVM, rootJS)
+
+lazy val rootJVM = project
+  .configure(mkRootJvmConfig(gh.proj, rootSettings, commonJvmSettings))
+  .aggregate(macrosJVM, platformJVM, docs)
+  .dependsOn(macrosJVM, platformJVM)
+
+lazy val rootJS = project
+  .configure(mkRootJsConfig(gh.proj, rootSettings, commonJsSettings))
+  .aggregate(macrosJS, platformJS)
+
+/** Macros - cross project that defines macros. */
+lazy val macros    = prj(macrosM)
+lazy val macrosJVM = macrosM.jvm
+lazy val macrosJS  = macrosM.js
+lazy val macrosM   = module("macros", CrossType.Pure)
+
+/** Platform - cross project that provides cross platform support. */
+lazy val platform    = prj(platformM)
+lazy val platformJVM = platformM.jvm
+lazy val platformJS  = platformM.js
+lazy val platformM = module("platform", CrossType.Dummy)
+  .dependsOn(macrosM)
   .settings(
-    scalaVersion := Scala213,
-    inConfig(IntegrationTest)(Defaults.testSettings ++ org.scalafmt.sbt.ScalafmtPlugin.scalafmtConfigSettings),
-    crossScalaVersions := Vector(Scala213, Scala212),
-    libraryDependencies ++= Dependencies.scalenium.value
+    libs.dependencies("specs2-core", "specs2-scalacheck"),
+    libs.testDependencies("scalatest")
   )
 
-lazy val examples = Project(id = "scalenium-examples", base = file("examples"))
-  .dependsOn(scalenium)
-  .configs(IntegrationTest)
-  .settings(
-    scalaVersion := Scala213,
-    inConfig(IntegrationTest)(Defaults.testSettings ++ org.scalafmt.sbt.ScalafmtPlugin.scalafmtConfigSettings),
-    crossScalaVersions := Vector(Scala213, Scala212),
-    libraryDependencies ++= Dependencies.scalenium.value
-  )
-
-/** Docs - Generates and publishes the scaladoc API documents and the project web site using sbt-microsite.
-  * https://47degrees.github.io/sbt-microsites/docs/settings/
-  */
-lazy val docs = Project(id = "scalenium-docs", base = file("docs"))
+/** Docs - Generates and publishes the scaladoc API documents and the project web site. */
+lazy val docs = project
+  .configure(mkDocConfig(gh, rootSettings, Seq(), platformJVM, macrosJVM))
   .enablePlugins(MicrositesPlugin)
   .enablePlugins(ScalaUnidocPlugin)
   .settings(
-    crossScalaVersions := Vector(Scala213, Scala212),
     micrositeName := "Scalenium",
     micrositeDescription := "Selenium on Scala examples.",
     micrositeUrl := "https://artemkorsakov.github.io",
@@ -104,21 +122,37 @@ lazy val docs = Project(id = "scalenium-docs", base = file("docs"))
     )
   )
 
-lazy val root = Project(id = "scalenium-all", base = file("."))
-  .aggregate(scalenium, examples)
-  .enablePlugins(GitBranchPrompt)
+lazy val buildSettings = sharedBuildSettings(gh, libs)
+
+lazy val commonSettings = sharedCommonSettings ++ Seq(
+  parallelExecution in Test := false,
+  developers := devs
+) ++ unidocCommonSettings
+
+lazy val commonJsSettings = Seq(scalaJSStage in Global := FastOptStage)
+
+lazy val commonJvmSettings = Seq()
+
+lazy val publishSettings = sharedPublishSettings(gh) ++ credentialSettings ++ sharedReleaseProcess
+
+lazy val scoverageSettings = sharedScoverageSettings(60)
+
+lazy val scalenium = project
   .settings(
-    crossScalaVersions := Nil,
-    publish / skip := true,
-    scalacOptions ++= Seq(
-      "-deprecation",
-      "-encoding",
-      "UTF-8",
-      "-language:experimental.macros",
-      "-feature",
-      "-unchecked",
-      "-Xfatal-warnings",
-      "-Ywarn-numeric-widen",
-      "-Ywarn-value-discard"
-    )
+    moduleName := "scalenium-core",
+    commonSettings,
+    scalaVersion := Scala213,
+    crossScalaVersions := Vector(Scala213, Scala212),
+    // libs.dependencies("selenium-java", "selenium-scala", "pureconfig", "scala-logging", "logback", "testcontainers")
+  )
+
+lazy val examples = project
+  .dependsOn(scalenium)
+  .aggregate(scalenium)
+  .settings(
+    moduleName := "henkan-examples",
+    commonSettings,
+    scalaVersion := Scala213,
+    crossScalaVersions := Vector(Scala213, Scala212),
+    noPublishSettings
   )
