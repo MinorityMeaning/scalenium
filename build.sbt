@@ -11,7 +11,7 @@ addCommandAlias("gitSnapshots", ";set version in ThisBuild := git.gitDescribedVe
 
 val release_version = "0.1.0"
 val badge =
-  "[![Maven Central](https://img.shields.io/maven-central/v/com.github.artemkorsakov/scalenium-core_2.13.svg?label=Maven%20Central&color=success)](https://search.maven.org/search?q=g:%22com.github.artemkorsakov%22%20AND%20a:%22scalenium-core_2.13%22)"
+  "[![Maven Central](https://img.shields.io/maven-central/v/com.github.artemkorsakov/scalenium_2.13.svg?label=Maven%20Central&color=success)](https://search.maven.org/search?q=g:%22com.github.artemkorsakov%22%20AND%20a:%22scalenium_2.13%22)"
 
 val gh = GitHubSettings(
   org = "artemkorsakov",

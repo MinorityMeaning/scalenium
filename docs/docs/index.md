@@ -23,7 +23,7 @@ In addition, **Improve this Page** button is available on the documentation page
 
 Add the following to your `build.sbt`
 ```scala
-libraryDependencies += "com.github.artemkorsakov" %% "scalenium-core" % "@VERSION@"
+libraryDependencies += "com.github.artemkorsakov" %% "scalenium" % "@VERSION@"
 ```
 
 ### Documentation
