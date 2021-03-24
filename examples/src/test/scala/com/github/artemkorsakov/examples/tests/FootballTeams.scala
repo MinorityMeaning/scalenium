@@ -1,4 +1,4 @@
-package com.github.artemkorsakov.examples.suites
+package com.github.artemkorsakov.examples.tests
 
 import com.github.artemkorsakov.containers.SeleniumContainerSuite
 import com.github.artemkorsakov.examples.fifa._
