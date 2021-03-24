@@ -32,6 +32,9 @@ val mainDev =
 val devs = List(mainDev)
 val libs = org.typelevel.libraries
 
+ThisBuild / crossScalaVersions := Seq(Scala212, Scala213)
+ThisBuild / scalaVersion := Scala213
+
 lazy val rootSettings = buildSettings ++ commonSettings ++ publishSettings ++ scoverageSettings
 lazy val module       = mkModuleFactory(gh.proj, mkConfig(rootSettings, commonJvmSettings, commonJsSettings))
 lazy val prj          = mkPrjFactory(rootSettings)
@@ -40,21 +43,32 @@ lazy val rootPrj = project
   .configure(mkRootConfig(rootSettings, rootJVM))
   .aggregate(rootJVM, rootJS)
   .dependsOn(rootJVM, rootJS)
+  .settings(
+    noPublishSettings,
+    crossScalaVersions := Nil
+  )
 
 lazy val rootJVM = project
   .configure(mkRootJvmConfig(gh.proj, rootSettings, commonJvmSettings))
-  .aggregate(macrosJVM, platformJVM, docs)
+  .aggregate(macrosJVM, platformJVM, docs, scalenium)
   .dependsOn(macrosJVM, platformJVM)
+  .settings(noPublishSettings, crossScalaVersions := Nil)
 
 lazy val rootJS = project
   .configure(mkRootJsConfig(gh.proj, rootSettings, commonJsSettings))
   .aggregate(macrosJS, platformJS)
+  .settings(
+    noPublishSettings,
+    crossScalaVersions := Nil
+  )
 
 /** Macros - cross project that defines macros. */
 lazy val macros    = prj(macrosM)
 lazy val macrosJVM = macrosM.jvm
 lazy val macrosJS  = macrosM.js
-lazy val macrosM   = module("macros", CrossType.Pure)
+lazy val macrosM = module("macros", CrossType.Pure).settings(
+  noPublishSettings
+)
 
 /** Platform - cross project that provides cross platform support. */
 lazy val platform    = prj(platformM)
@@ -63,6 +77,7 @@ lazy val platformJS  = platformM.js
 lazy val platformM = module("platform", CrossType.Dummy)
   .dependsOn(macrosM)
   .settings(
+    noPublishSettings,
     libs.dependencies("specs2-core", "specs2-scalacheck"),
     libs.testDependencies("scalatest")
   )
@@ -70,8 +85,7 @@ lazy val platformM = module("platform", CrossType.Dummy)
 /** Docs - Generates and publishes the scaladoc API documents and the project web site. */
 lazy val docs = project
   .configure(mkDocConfig(gh, rootSettings, Seq(), platformJVM, macrosJVM))
-  .enablePlugins(MicrositesPlugin)
-  .enablePlugins(ScalaUnidocPlugin)
+  .enablePlugins(MicrositesPlugin, ScalaUnidocPlugin)
   .settings(
     micrositeName := "Scalenium",
     micrositeDescription := "Selenium on Scala examples.",
@@ -123,8 +137,11 @@ lazy val docs = project
 lazy val buildSettings = sharedBuildSettings(gh, libs)
 
 lazy val commonSettings = sharedCommonSettings ++ Seq(
+  scalaVersion := (ThisBuild / scalaVersion).value,
+  crossScalaVersions := (ThisBuild / crossScalaVersions).value,
   parallelExecution in Test := false,
-  developers := devs
+  developers := devs,
+  scalacOptions := scalacOptions.value.filterNot(_.startsWith("-Wunused")).filterNot(_.startsWith("-Ywarn-unused"))
 ) ++ unidocCommonSettings
 
 lazy val commonJsSettings = Seq(scalaJSStage in Global := FastOptStage)
@@ -137,8 +154,6 @@ lazy val scoverageSettings = sharedScoverageSettings(60)
 
 lazy val scalenium = project
   .settings(
-    scalaVersion := Scala213,
-    crossScalaVersions := Vector(Scala213, Scala212),
     commonSettings,
     libraryDependencies ++= Dependencies.scalenium.value
   )
@@ -146,8 +161,6 @@ lazy val scalenium = project
 lazy val examples = project
   .dependsOn(scalenium)
   .settings(
-    scalaVersion := Scala213,
-    crossScalaVersions := Vector(Scala213, Scala212),
     moduleName := "scalenium-examples",
     commonSettings,
     noPublishSettings
