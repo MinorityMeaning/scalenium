@@ -1,3 +1,4 @@
+import Dependencies.Version._
 import microsites._
 import sbtcatalysts.CatalystsKeys.docsMappingsAPIDir
 import sbtcrossproject.CrossPlugin.autoImport.CrossType
@@ -29,10 +30,7 @@ val mainDev =
   )
 
 val devs = List(mainDev)
-
-val Scala212 = "2.12.13"
-val Scala213 = "2.13.5"
-val libs     = Dependencies.libs
+val libs = org.typelevel.libraries
 
 lazy val rootSettings = buildSettings ++ commonSettings ++ publishSettings ++ scoverageSettings
 lazy val module       = mkModuleFactory(gh.proj, mkConfig(rootSettings, commonJvmSettings, commonJsSettings))
@@ -139,20 +137,18 @@ lazy val scoverageSettings = sharedScoverageSettings(60)
 
 lazy val scalenium = project
   .settings(
-    moduleName := "scalenium-core",
-    commonSettings,
     scalaVersion := Scala213,
     crossScalaVersions := Vector(Scala213, Scala212),
-    // libs.dependencies("selenium-java", "selenium-scala", "pureconfig", "scala-logging", "logback", "testcontainers")
+    commonSettings,
+    libraryDependencies ++= Dependencies.scalenium.value
   )
 
 lazy val examples = project
   .dependsOn(scalenium)
-  .aggregate(scalenium)
   .settings(
-    moduleName := "henkan-examples",
-    commonSettings,
     scalaVersion := Scala213,
     crossScalaVersions := Vector(Scala213, Scala212),
+    moduleName := "scalenium-examples",
+    commonSettings,
     noPublishSettings
   )
