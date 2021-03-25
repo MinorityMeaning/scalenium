@@ -21,6 +21,7 @@ ThisBuild / publishTo := sonatypePublishToBundle.value
 ThisBuild / sonatypeTimeoutMillis := 2 * 60 * 1000
 
 import sbtrelease.ReleasePlugin.autoImport.ReleaseTransformations._
+ThisBuild / javaOptions += "-Xmx8G"
 ThisBuild / releaseCrossBuild := true
 ThisBuild / releaseVersionBump := sbtrelease.Version.Bump.Next
 ThisBuild / releaseProcess := Seq[ReleaseStep](
