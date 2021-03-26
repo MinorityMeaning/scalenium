@@ -13,11 +13,12 @@ val release_version = "0.1.0"
 val badge =
   "[![Maven Central](https://img.shields.io/maven-central/v/com.github.artemkorsakov/scalenium_2.13.svg?label=Maven%20Central&color=success)](https://search.maven.org/search?q=g:%22com.github.artemkorsakov%22%20AND%20a:%22scalenium_2.13%22)"
 
+val apache2 = "Apache-2.0" -> url("https://www.apache.org/licenses/LICENSE-2.0.html")
 val gh = GitHubSettings(
   org = "artemkorsakov",
   proj = "scalenium",
   publishOrg = "com.github.artemkorsakov",
-  license = apache
+  license = apache2
 )
 
 val github = "https://github.com/artemkorsakov"

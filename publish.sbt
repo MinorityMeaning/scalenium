@@ -5,6 +5,7 @@ ThisBuild / organizationName := "Artem Korsakov"
 ThisBuild / organizationHomepage := Some(url("https://github.com/artemkorsakov"))
 
 ThisBuild / description := "Selenium on Scala examples."
+ThisBuild / homepage := Some(url("https://artemkorsakov.github.io/scalenium/"))
 
 ThisBuild / credentials += Credentials(
   "Sonatype Nexus Repository Manager",
