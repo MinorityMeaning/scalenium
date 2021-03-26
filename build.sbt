@@ -16,7 +16,7 @@ val badge =
 val gh = GitHubSettings(
   org = "artemkorsakov",
   proj = "scalenium",
-  publishOrg = "artemkorsakov",
+  publishOrg = "com.github.artemkorsakov",
   license = apache
 )
 
