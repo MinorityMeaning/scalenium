@@ -31,7 +31,8 @@ title: "Examples"
 все ресурсы чистились сразу после прогона. 
 Testcontainers именно это и делает - разворачивает docker image на время прогона автотестов.
 
-Правда возникает проблема с локальным дебагом, но для этого всегда можно использовать отдельный [Spec](https://github.com/artemkorsakov/scalenium/blob/master/tests/src/test/scala/com/github/artemkorsakov/spec/LocalDebugSpec.scala)
+Правда возникает проблема с локальным дебагом, но для этого всегда можно использовать отдельный 
+[Spec](https://github.com/artemkorsakov/scalenium/blob/master/scalenium/src/test/scala/com/github/artemkorsakov/spec/LocalDebugSpec.scala)
 
 
 ### Scala + Selenium examples:
