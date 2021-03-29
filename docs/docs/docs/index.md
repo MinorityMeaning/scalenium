@@ -50,3 +50,47 @@ class SeleniumDriverSpec extends AnyFlatSpec with SeleniumContainerSuite {
 ```
 
 - Run spec
+
+
+#### Additional methods for Query
+
+```scala
+import com.github.artemkorsakov.query.UpQuery._
+
+val query: Query = ???
+
+// Does the element exist on the page?
+query.isPresent // Boolean
+
+// Waiting for the element to present on the page
+query.waitPresent() // WebElement 
+
+// Does the element visible on the page?
+query.isVisible // Boolean
+
+// Waiting for the element to visible on the page
+query.waitVisible() // WebElement 
+
+// The text content of the element after whitespace normalization.
+// For example: if element's text is "\n\t Press \n \n enter \n\n" normalizeSpaceText returns "Press enter"
+query.normalizeSpaceText // String
+
+// The text content of all elements with the given locator
+query.allTexts // IndexedSeq[String]
+
+// Element attribute
+query.attribute(name: String) // Option[String]
+
+// Placeholder attribute of the element
+query.placeholder // Option[String]
+
+// Does element's attribute "class" contain the given value?
+query.doesClassContain(value: String) // Boolean
+
+// Waiting for element's attribute "class" to contain the given value
+query.waitClassContain(value: String) // Boolean
+
+// Scroll to element
+query.scrollToElement() // Object 
+
+```

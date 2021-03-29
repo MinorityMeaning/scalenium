@@ -15,9 +15,11 @@ case class UpQuery(query: Query)(implicit driver: WebDriver) extends Waiter {
   def waitVisible(): WebElement =
     webDriverWait(driver).until(ExpectedConditions.visibilityOfElementLocated(query.by))
 
+  /** The text content of the element after whitespace normalization */
   def normalizeSpaceText: String =
     find(query).map(_.text.replaceAll("\\s", " ").trim).getOrElse("")
 
+  /** The text content of all elements with the given locator */
   def allTexts: IndexedSeq[String] =
     findAll(query).map(_.text.trim).toIndexedSeq
 

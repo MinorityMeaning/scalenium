@@ -210,14 +210,14 @@ def citizenship(): Seq[String] = findAll(citizenshipImg).flatMap(_.attribute("ti
 | Ukraine | 9% (3/33) | (Brazil (2) -> (Marlos, Júnior Moraes), Hungary (1) -> (Igor Kharatin)) |
 | Belarus | 4% (1/25) | (Cameroon (1) -> (Maks Ebong)) |
 
-<br>В наших сборных только 3 натурализированных игрока (и все из Бразилии). Остальные родились в СССР.
+<br>В наших сборных только 3 натурализованных игрока (и все из Бразилии). Остальные родились в СССР.
 
 
 ### Results (for CONMEBOL)
 
 | Country name | % | Foreigners   |
 | ------------ |:------------:|:------------:|
-| Brazil | 36% (9/25) | List(Spain (3) -> (Casemiro, Bruno Guimarães, Vinícius Júnior), Italy (1) -> (Alex Telles), France (1) -> (Thiago Silva), Portugal (4) -> (Ederson, Marquinhos, Allan, Lucas Paquetá)) |
+| Brazil | 36% (9/25) | (Spain (3) -> (Casemiro, Bruno Guimarães, Vinícius Júnior), Italy (1) -> (Alex Telles), France (1) -> (Thiago Silva), Portugal (4) -> (Ederson, Marquinhos, Allan, Lucas Paquetá)) |
 | Argentina | 57% (13/23) | (Spain (2) -> (Gonzalo Montiel, Lionel Messi), Italy (11) -> (Lucas Martínez Quarta, Wálter Kannemann, Nicolás Tagliafico, Guido Rodríguez, Rodrigo de Paul, Giovani Lo Celso, Nicolás Domínguez, Ángel Di María, Joaquín Correa, Papu Gómez, Lucas Alario)) |
 | Uruguay | 51,5% (18/35) | (Spain (7) -> (José María Giménez, Sebastián Coates, Diego Godín, Agustín Oliveros, Damián Suárez, Lucas Torreira, Federico Valverde), Paraguay (1) -> (Rodrigo Muñoz), Italy (10) -> (Fernando Muslera, Martín Campaña, Sergio Rochet, Matías Viña, Franco Pizzichillo, Nahitan Nández, Matías Vecino, Giorgian de Arrascaeta, Diego Rossi, Cristhian Stuani)) |
 | Colombia | 22% (6/27) | (Spain (4) -> (Jeison Murillo, Johan Mojica, James Rodríguez, Luis Suárez), Argentina (1) -> (Frank Fabra), England (1) -> (Steven Alzate)) |

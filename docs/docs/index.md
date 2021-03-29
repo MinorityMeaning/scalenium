@@ -22,8 +22,18 @@ In addition, **Improve this Page** button is available on the documentation page
 ### Getting Started
 
 Add the following to your `build.sbt`
+
 ```scala
 libraryDependencies += "com.github.artemkorsakov" %% "scalenium" % "@VERSION@"
+```
+
+Use additional methods for Query in the code:
+
+```scala
+import com.github.artemkorsakov.query.UpQuery._
+
+val query: Query = ???
+query.waitClassContain("active")
 ```
 
 ### Documentation
