@@ -17,6 +17,15 @@ Add the following to your build.sbt
 libraryDependencies += "com.github.artemkorsakov" %% "scalenium" % "0.1.0"
 ```
 
+Use additional methods for Query in the code:
+
+```scala
+import com.github.artemkorsakov.query.UpQuery._
+
+val query: Query = ???
+query.waitClassContain("active")
+```
+
 ## Documentation
 
 The library homepage is available [here](https://artemkorsakov.github.io/scalenium/).
