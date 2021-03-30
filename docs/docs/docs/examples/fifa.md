@@ -1,7 +1,7 @@
 ---
 layout: docsplus 
 title: "Football teams"
-realization: test/scala/com/github/artemkorsakov/examples/tests/FootballTeams.scala
+realization: test/scala/com/github/artemkorsakov/examples/tests/FootballTeamsSpec.scala
 ---
 
 ### Task: 

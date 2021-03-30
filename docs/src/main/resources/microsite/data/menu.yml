@@ -8,3 +8,6 @@ options:
     nested_options:
       - title: Football teams
         url: docs/examples/fifa.html
+
+      - title: Nations league
+        url: docs/examples/nations-league.html

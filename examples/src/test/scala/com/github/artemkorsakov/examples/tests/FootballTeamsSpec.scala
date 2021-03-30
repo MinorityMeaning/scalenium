@@ -9,7 +9,7 @@ import org.scalatestplus.selenium.WebBrowser._
 
 import scala.collection.mutable.ArrayBuffer
 
-class FootballTeams extends AnyFlatSpec with SeleniumContainerSuite with Matchers {
+class FootballTeamsSpec extends AnyFlatSpec with SeleniumContainerSuite with Matchers {
 
   "FootballTeams" should "make a url list of national teams" in {
     val urls = calculateCountriesUrls
