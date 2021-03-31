@@ -71,6 +71,9 @@ query.isVisible // Boolean
 // Waiting for the element to visible on the page
 query.waitVisible() // WebElement 
 
+// Wait for the element to become invisible on the page
+query.waitNotVisible() // Boolean
+  
 // The text content of the element after whitespace normalization.
 // For example: if element's text is "\n\t Press \n \n enter \n\n" normalizeSpaceText returns "Press enter"
 query.normalizeSpaceText // String

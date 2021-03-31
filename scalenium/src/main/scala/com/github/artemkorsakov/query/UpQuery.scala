@@ -1,6 +1,6 @@
 package com.github.artemkorsakov.query
 
-import org.openqa.selenium.support.ui.ExpectedConditions
+import org.openqa.selenium.support.ui.ExpectedConditions._
 import org.openqa.selenium.{ JavascriptExecutor, WebDriver, WebElement }
 import org.scalatestplus.selenium.WebBrowser._
 
@@ -8,12 +8,15 @@ case class UpQuery(query: Query)(implicit driver: WebDriver) extends Waiter {
   def isPresent: Boolean = find(query).isDefined
 
   def waitPresent(): WebElement =
-    webDriverWait(driver).until(ExpectedConditions.presenceOfElementLocated(query.by))
+    webDriverWait(driver).until(presenceOfElementLocated(query.by))
 
   def isVisible: Boolean = find(query).exists(_.isDisplayed)
 
   def waitVisible(): WebElement =
-    webDriverWait(driver).until(ExpectedConditions.visibilityOfElementLocated(query.by))
+    webDriverWait(driver).until(visibilityOfElementLocated(query.by))
+
+  def waitNotVisible(): Boolean =
+    webDriverWait(driver).until(invisibilityOfElementLocated(query.by))
 
   /** The text content of the element after whitespace normalization */
   def normalizeSpaceText: String =
@@ -34,7 +37,7 @@ case class UpQuery(query: Query)(implicit driver: WebDriver) extends Waiter {
     } yield attribute.contains(value)).contains(true)
 
   def waitClassContain(value: String): Boolean =
-    webDriverWait(driver).until(ExpectedConditions.attributeContains(query.by, "class", value))
+    webDriverWait(driver).until(attributeContains(query.by, "class", value))
 
   def scrollToElement(): Object = {
     val element    = driver.findElement(query.by)

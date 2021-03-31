@@ -123,7 +123,7 @@ def results: mutable.Buffer[(Int, String)] =
   `.//td[contains(@class, 'hauptlink')]` - название страны
 - считываем текст из дочерних элементов
 
-Получим следующую картину для дивизиона D:
+Получим следующую картину, например, для дивизиона D:
 
 | Place | Country       |
 | ----- |:-------------:|
@@ -134,4 +134,226 @@ def results: mutable.Buffer[(Int, String)] =
 | 1     | Gibraltar     |
 | 2     | Liechtenstein |
 | 3     | San Marino    |
+
+#### Previous results
+
+Для того, чтобы получить результаты предыдущего сезона, необходимо в фильтре **Filter by season:** выбрать 
+значение **18/19** и нажать на кнопку **Show**:
+
+![Previous](https://raw.githubusercontent.com/artemkorsakov/scalenium/master/docs/src/main/resources/microsite/img/examples/nations_league/previous.png)
+
+Здесь будет больше действий и проверок:
+- В первую очередь нужно раскрыть список доступных сезонов (нажать на кнопку с css-локатором `a.chzn-single > div > b`)
+- Затем кликнуть на предыдущий сезон (нажать на ссылку с xpath-локатором `//li[.='18/19']`)
+- После этого необходимо дождаться, когда скроется список доступных сезонов
+- Затем необходимо нажать на кнопку **Show** (css-локатор `input[value='Show']`)
+- И подождать, когда произойдет переход на страницу предыдущего сезона (для этого будем ждать, когда url текущей
+  страницы станет оканчиваться на "saison_id=2018")
+  
+```scala
+val selectSeason: Query   = cssSelector("a.chzn-single > div > b")
+val previousSeason: Query = xpath("//li[.='18/19']")
+val show: Query           = cssSelector("input[value='Show']")
+
+def selectPreviousSeason: Boolean = {
+  selectSeason.waitVisible().click()
+  previousSeason.waitVisible().click()
+  new WebDriverWait(driver, Duration.ofSeconds(timeout)).until(invisibilityOfElementLocated(previousSeason.by))
+  clickOn(show)
+  new WebDriverWait(driver, Duration.ofSeconds(timeout)).until(wd => wd.getCurrentUrl.endsWith("saison_id=2018"))
+}
+```
+
+Теперь можно собрать все воедино и получим следующее:
+- Переходим на главную страницу сайта
+- Для каждой из групп 'A', 'B', 'C', 'D' выполняем:
+  - Переходим в заданную группу
+  - Считываем результаты второго розыгрыша
+  - Сохраняем их
+  - Переходим в предыдущий сезон
+  - Считываем результаты первого розыгрыша
+  - Сохраняем их
+  
+P.S. Забегая вперед, скажу, что за это время страна "Macedonia" сменила имя на "North Macedonia" - это пришлось учесть.
+  
+```scala
+case class Result(number: Int, group: Char, place: Int, country: String)
+
+val mainPage = new MainPage
+go to mainPage
+
+val results: ArrayBuffer[Result] = ArrayBuffer.empty[Result]
+
+Seq('A', 'B', 'C', 'D').foreach(group => {
+  val leagueGroupPage = mainPage.goToGroup(group.toString)
+  val groupResult     = leagueGroupPage.results
+  groupResult.foreach { case (place, country) => results += Result(2, group, place, country) }
+  leagueGroupPage.selectPreviousSeason
+  leagueGroupPage.waitLoad(group.toString)
+  val previousSeasonResult = leagueGroupPage.results
+  previousSeasonResult.foreach {
+    case (place, country) =>
+      results += Result(1, group, place, country.replace("Macedonia", "North Macedonia"))
+  }
+})
+```
+
+Теперь осталось только обработать результаты.
+
+Результаты у нас в виде коллекции `case class Result(number: Int, group: Char, place: Int, country: String)` -
+приведем эту коллекцию к коллекции `case class ParsedResult(country: String, firstSeason: (Char, Int),
+secondSeason: (Char, Int), thirdSeason: Char, progress: (Int, Int))`, где сезон представлен в виде 
+_tuple (дивизион, итоговое место)_, а прогресс - из двух цифр, обозначающих прогресс по итогам розыгрыша:
+_1 (повышение в классе) | 0 | -1 (понижение)_
+
+
+
+
+```scala
+import scala.collection.mutable.ArrayBuffer
+
+case class Result(number: Int = 0, group: Char = 'E', place: Int = 0, country: String = "")
+case class ParsedResult(country: String,
+                        firstSeason: (Char, Int),
+                        secondSeason: (Char, Int),
+                        thirdSeason: Char,
+                        progress: (Int, Int))
+
+val results: ArrayBuffer[Result] = ???
+
+val parsedResults = results
+        .groupBy(_.country)
+        .view
+        .mapValues(seq => {
+          val country: String           = seq.head.country
+          val firstRes                  = seq.find(_.number == 1).getOrElse(Result())
+          val firstSeason: (Char, Int)  = (firstRes.group, firstRes.place)
+          val secondRes                 = seq.find(_.number == 2).getOrElse(Result())
+          val secondSeason: (Char, Int) = (secondRes.group, secondRes.place)
+          val thirdSeason: Char =
+            if (secondSeason._2 == 1 && secondSeason._1 != 'A') (secondSeason._1 - 1).toChar
+            else if (secondSeason._2 == 4 && secondSeason._1 != 'D') (secondSeason._1 + 1).toChar
+            else secondSeason._1
+          val progress: (Int, Int) = (firstSeason._1 - secondSeason._1, secondSeason._1 - thirdSeason)
+          ParsedResult(country, firstSeason, secondSeason, thirdSeason, progress)
+        })
+        .values
+        .groupBy(_.progress)
+```
+
+
+
+
+
+
+
+
+##### Group (1,1) - 2
+
+| Country | 1st | 2nd | 3rd |
+| -----   |:----|:----|:---:|
+| Hungary | C(2) | B(1) | A |
+| Armenia | D(2) | C(1) | B |
+
+
+#### Group (1,0) - 13
+
+| Country | 1st | 2nd | 3rd |
+| -----   |:----|:----|:---:|
+| Denmark | B(1) | A(2) | A |
+| Romania | C(2) | B(3) | B |
+| Serbia | C(1) | B(3) | B |
+| Scotland | C(1) | B(2) | B |
+| Finland | C(1) | B(2) | B |
+| Israel | C(2) | B(3) | B |
+| Norway | C(1) | B(2) | B |
+| Luxembourg | D(2) | C(2) | C |
+| Azerbaijan | D(2) | C(3) | C |
+| Georgia | D(1) | C(3) | C |
+| Belarus | D(1) | C(2) | C |
+| Kosovo | D(1) | C(3) | C |
+| North Macedonia | D(1) | C(2) | C |
+
+
+#### Group (0,1) - 8
+
+| Country | 1st | 2nd | 3rd |
+| -----   |:----|:----|:---:|
+| Wales | B(2) | B(1) | A |
+| Czech Republic | B(2) | B(1) | A |
+| Austria | B(2) | B(1) | A |
+| Slovenia | C(4) | C(1) | B |
+| Albania | C(3) | C(1) | B |
+| Montenegro | C(3) | C(1) | B |
+| Gibraltar | D(3) | D(1) | C |
+| Faroe Islands | D(3) | D(1) | C |
+
+
+#### Group (1,-1) - 6
+
+| Country | 1st | 2nd | 3rd |
+| -----   |:----|:----|:---:|
+| Ukraine | B(1) | A(4) | B |
+| Sweden | B(1) | A(4) | B |
+| Bosnia | B(1) | A(4) | B |
+| Bulgaria | C(2) | B(4) | C |
+| Kazakhstan | D(2) | C(4) | D |
+| Moldova | D(3) | C(4) | D |
+
+
+#### Group (0,0) - 20
+
+| Country | 1st | 2nd | 3rd |
+| -----   |:----|:----|:---:|
+| Poland | A(3) | A(3) | A |
+| Spain | A(2) | A(1) | A |
+| Italy | A(2) | A(1) | A |
+| Netherlands | A(1) | A(2) | A |
+| England | A(1) | A(3) | A |
+| Croatia | A(3) | A(3) | A |
+| Belgium | A(2) | A(1) | A |
+| France | A(2) | A(1) | A |
+| Switzerland | A(1) | A(3) | A |
+| Germany | A(3) | A(2) | A |
+| Portugal | A(1) | A(2) | A |
+| Russia | B(2) | B(2) | B |
+| Ireland | B(3) | B(3) | B |
+| Greece | C(3) | C(2) | C |
+| Lithuania | C(4) | C(3) | C |
+| Latvia | D(3) | D(3) | D |
+| Andorra | D(4) | D(4) | D |
+| Liechtenstein | D(4) | D(2) | D |
+| Malta | D(4) | D(2) | D |
+| San Marino | D(4) | D(3) | D |
+
+
+##### Group (-1,1) - 0
+
+| Country | 1st | 2nd | 3rd |
+| -----   |:----|:----|:---:|
+
+
+##### Group (-1,0) - 0
+
+| Country | 1st | 2nd | 3rd |
+| -----   |:----|:----|:---:|
+
+
+##### Group (0,-1) - 6
+
+| Country | 1st | 2nd | 3rd |
+| -----   |:----|:----|:---:|
+| Iceland | A(3) | A(4) | B |
+| N. Ireland | B(3) | B(4) | C |
+| Slovakia | B(3) | B(4) | C |
+| Turkey | B(3) | B(4) | C |
+| Estonia | C(4) | C(4) | D |
+| Cyprus | C(3) | C(4) | D |
+
+
+##### Group (-1,-1) - 0
+
+| Country | 1st | 2nd | 3rd |
+| -----   |:----|:----|:---:|
+
 
