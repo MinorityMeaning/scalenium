@@ -200,13 +200,11 @@ Seq('A', 'B', 'C', 'D').foreach(group => {
 
 Теперь осталось только обработать результаты.
 
-Результаты у нас в виде коллекции `case class Result(number: Int, group: Char, place: Int, country: String)` -
+Результаты у нас в виде коллекции `case class Result(number: Int, group: Char, place: Int, country: String)`,
 приведем эту коллекцию к коллекции `case class ParsedResult(country: String, firstSeason: (Char, Int),
 secondSeason: (Char, Int), thirdSeason: Char, progress: (Int, Int))`, где сезон представлен в виде 
 _tuple (дивизион, итоговое место)_, а прогресс - из двух цифр, обозначающих прогресс по итогам розыгрыша:
 _1 (повышение в классе) | 0 | -1 (понижение)_
-
-
 
 
 ```scala
@@ -241,14 +239,13 @@ val parsedResults = results
         .groupBy(_.progress)
 ```
 
+#### Самые успешные сборные?
+
+Разделим полученный результат на группы сборных, объединенных по достигнутому прогрессу.
+Получим следующий результат:
 
 
-
-
-
-
-
-##### Group (1,1) - 2
+##### Суперпрогресс (сборные, совершившие прорыв через 2 дивизиона) - 2
 
 | Country | 1st | 2nd | 3rd |
 | -----   |:----|:----|:---:|
@@ -256,7 +253,7 @@ val parsedResults = results
 | Armenia | D(2) | C(1) | B |
 
 
-#### Group (1,0) - 13
+##### Поднялись и закрепились - 13
 
 | Country | 1st | 2nd | 3rd |
 | -----   |:----|:----|:---:|
@@ -275,7 +272,7 @@ val parsedResults = results
 | North Macedonia | D(1) | C(2) | C |
 
 
-#### Group (0,1) - 8
+##### Поднялись со второй попытки - 8
 
 | Country | 1st | 2nd | 3rd |
 | -----   |:----|:----|:---:|
@@ -289,7 +286,7 @@ val parsedResults = results
 | Faroe Islands | D(3) | D(1) | C |
 
 
-#### Group (1,-1) - 6
+##### Поднялись и опустились - 6
 
 | Country | 1st | 2nd | 3rd |
 | -----   |:----|:----|:---:|
@@ -301,7 +298,7 @@ val parsedResults = results
 | Moldova | D(3) | C(4) | D |
 
 
-#### Group (0,0) - 20
+##### Стабильная группа - 20
 
 | Country | 1st | 2nd | 3rd |
 | -----   |:----|:----|:---:|
@@ -327,19 +324,11 @@ val parsedResults = results
 | San Marino | D(4) | D(3) | D |
 
 
-##### Group (-1,1) - 0
+##### Опустились и поднялись - 0
 
-| Country | 1st | 2nd | 3rd |
-| -----   |:----|:----|:---:|
+##### Опустились и остались - 0
 
-
-##### Group (-1,0) - 0
-
-| Country | 1st | 2nd | 3rd |
-| -----   |:----|:----|:---:|
-
-
-##### Group (0,-1) - 6
+##### Опустились на втором сезоне - 6
 
 | Country | 1st | 2nd | 3rd |
 | -----   |:----|:----|:---:|
@@ -351,9 +340,4 @@ val parsedResults = results
 | Cyprus | C(3) | C(4) | D |
 
 
-##### Group (-1,-1) - 0
-
-| Country | 1st | 2nd | 3rd |
-| -----   |:----|:----|:---:|
-
-
+##### Супернеудачники, упавшие два раза подряд - 0
